@@ -17,3 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/ajax/predicttime', 'AjaxController@PredictTime');
+Route::get('/ajax/process_start', 'AjaxController@ProcessStart');
+Route::get('/ajax/process_hold', 'AjaxController@ProcessHold');
+Route::get('/ajax/process_complete', 'AjaxController@ProcessComplete');

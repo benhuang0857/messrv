@@ -26,14 +26,15 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion" 
-                                        href="#collapseOne">批號：{{$batch->batch_code}} 
+                                        href="#collapse{{$batch->id}}">批號：{{$batch->batch_code}} 
                                         <span class="badge badge-secondary" style="background:<?php echo $Data['Color'][$batch->state]?>">{{$Data['States'][$batch->state]}}</span>
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseOne" class="panel-collapse collapse in">
+                                <div id="collapse{{$batch->id}}" class="panel-collapse collapse in">
                                     <div class="panel-body">
                                     <form>
+                                        <input type="text" name="batchid" class="form-control" value="{{$batch->id}}" readonly>
                                         <div class="form-group">
                                             <label for="order">製程順序</label>
                                             <input type="text" name="order" class="form-control" value="{{$batch->ProdProcessesList->order}}" readonly>
@@ -59,23 +60,82 @@
                                             <label for="scrap">報廢</label>
                                             <input type="number" name="scrap" class="form-control" value="{{$batch->scrap}}" >
                                         </div>
-                                        <button type="submit" class="btn btn-primary">執行</button>
-                                        <button type="submit" class="btn btn-danger">暫停</button>
-                                        <button type="submit" class="btn btn-success">完成</button>
+                                        <a type="submit" class="btn btn-primary" onclick="process(this)">執行</a>
+                                        <a type="submit" class="btn btn-danger" onclick="hold(this)">暫停</a>
+                                        <a type="submit" class="btn btn-success" onclick="complete(this)">完成</a>
                                     </form>
                                     </div>
                                 </div>
                             </div>
-
-                            
                         @endforeach
-                        
                     </div>
-
-
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function process(event)
+    {
+        var batchId = $(event).closest('form').find('input[name="batchid"]').val();
+        var scrap = $(event).closest('form').find('input[name="scrap"]').val();
+
+        $.ajax({
+            type: "GET",
+            url: "/ajax/process_start",
+            dataType: "json",
+            data:{batchId: batchId},
+            success: function (response) {
+                alert('開始執行');
+                $(event).closest('.panel').css("background-color", "#e6fdd8")
+            },
+            error: function (thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
+
+    function hold(event)
+    {
+        var batchId = $(event).closest('form').find('input[name="batchid"]').val();
+        var scrap = $(event).closest('form').find('input[name="scrap"]').val();
+
+        $.ajax({
+            type: "GET",
+            url: "/ajax/process_hold",
+            dataType: "json",
+            data:{batchId: batchId},
+            success: function (response) {
+                alert('暫停');
+                $(event).closest('.panel').css("background-color", "")
+            },
+            error: function (thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
+
+    function complete(event)
+    {
+        var batchId = $(event).closest('form').find('input[name="batchid"]').val();
+        var scrap = $(event).closest('form').find('input[name="scrap"]').val();
+
+        $.ajax({
+            type: "GET",
+            url: "/ajax/process_complete",
+            dataType: "json",
+            data:{batchId: batchId},
+            success: function (response) {
+                alert('完成');
+                $(event).closest('.panel').css("background-color", "#cbcbcb")
+            },
+            error: function (thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
+    
+</script>
+
 @endsection

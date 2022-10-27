@@ -15,6 +15,6 @@ class Runs extends Model
 
     public function Maker()
     {
-        return $this->hasOne('App\Staffs', 'id', 'maker_id');
+        return $this->hasOne('App\User', 'id', 'maker_id');
     }
 }

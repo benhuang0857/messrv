@@ -15,7 +15,7 @@ class ProcessesController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Processes';
+    protected $title = '製程(Processes)';
 
     /**
      * Make a grid builder.
@@ -27,12 +27,12 @@ class ProcessesController extends AdminController
         $grid = new Grid(new Processes());
 
         $grid->column('id', __('Id'));
-        $grid->column('process_code', __('Process code'));
-        $grid->column('name', __('Name'));
-        $grid->column('process_time', __('Process time'));
-        $grid->column('note', __('Note'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('process_code', __('製程代碼'));
+        $grid->column('name', __('製程名稱'));
+        $grid->column('process_time', __('製程秒數'));
+        $grid->column('note', __('備註'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -67,10 +67,10 @@ class ProcessesController extends AdminController
     {
         $form = new Form(new Processes());
 
-        $form->text('process_code', __('Process code'));
-        $form->text('name', __('Name'));
-        $form->number('process_time', __('Process time'));
-        $form->textarea('note', __('Note'));
+        $form->text('process_code', __('製程代碼'));
+        $form->text('name', __('製程名稱'));
+        $form->number('process_time', __('製程秒數'))->default(0);
+        $form->textarea('note', __('備註'));
 
         return $form;
     }

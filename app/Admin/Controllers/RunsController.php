@@ -4,13 +4,15 @@ namespace App\Admin\Controllers;
 
 use App\Runs;
 use App\Batches;
-use App\Staffs;
+use App\User;
 use App\Products;
 use App\ProdProcessesList;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
+use Encore\Admin\Admin;
 
 class RunsController extends AdminController
 {
@@ -19,7 +21,7 @@ class RunsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Runs';
+    protected $title = '工單管理(Runs)';
 
     /**
      * Make a grid builder.
@@ -31,17 +33,19 @@ class RunsController extends AdminController
         $grid = new Grid(new Runs());
 
         $grid->column('id', __('Id'));
-        $grid->column('run_code', __('Run code'));
-        $grid->column('maker_id', __('Maker id'));
-        $grid->column('product_id', __('Product id'));
-        $grid->column('quantity', __('Quantity'));
-        $grid->column('each_quantity', __('Each quantity'));
-        $grid->column('start_time', __('Start time'));
-        $grid->column('end_time', __('End time'));
-        $grid->column('run_second', __('Run second'));
-        $grid->column('state', __('State'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('run_code', __('工單ID'));
+        $grid->column('Maker.name', __('建立者'));
+        $grid->column('Products.product_code', __('產品'));
+        $grid->column('quantity', __('總數量'));
+        $grid->column('each_quantity', __('分批'));
+        $grid->column('start_time', __('開始時間'));
+        $grid->column('end_time', __('結束時間'));
+        $grid->column('predict_second', __('預估執行秒數'));
+        $grid->column('run_second', __('實際執行秒數'));
+        $grid->column('qtime', __('QTime'));
+        $grid->column('state', __('狀態'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -81,7 +85,7 @@ class RunsController extends AdminController
     {
         $form = new Form(new Runs());
 
-        $_staffs = Staffs::all();
+        $_staffs = User::all();
         $_staffMap = array();
         foreach($_staffs as $item)
         {
@@ -95,16 +99,37 @@ class RunsController extends AdminController
             $_producMap[$item->id] = $item->product_code;
         }
 
-        $form->text('run_code', __('Run code'))->default('run-'.uniqid());
-        $form->select('maker_id', __('Maker id'))->options($_staffMap);
-        $form->select('product_id', __('Product id'))->options($_producMap);
-        $form->number('quantity', __('Quantity'))->default(1);
-        $form->number('each_quantity', __('Each quantity'))->default(1);
-        $form->datetime('start_time', __('Start time'))->default(date('Y-m-d H:i:s'));
-        $form->datetime('end_time', __('End time'))->default(date('Y-m-d H:i:s'));
-        $form->number('run_second', __('Run second'))->default(1);
-        $form->select('state', __('State'))->default('peddning')->options([
-            'peddning'  => '尚未審核', 
+        Admin::script('
+            $("select[name=product_id]").change(function(){
+                var productId = $("select[name=product_id]").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/ajax/predicttime",
+                    dataType: "json",
+                    data:{pid: productId},
+                    success: function (response) {
+                        $("input[name=predict_second]").val(response);
+                    },
+                    error: function (thrownError) {
+                        console.log(thrownError);
+                    }
+                });
+            });
+        ');
+
+        $form->text('run_code', __('工單ID'))->default(uniqid());
+        $form->select('maker_id', __('建立者'))->options($_staffMap);
+        $form->select('product_id', __('產品'))->options($_producMap);
+        $form->number('quantity', __('總數量'))->default(1);
+        $form->number('each_quantity', __('分批'))->default(1);
+        $form->datetime('start_time', __('開始時間'))->default(date('Y-m-d H:i:s'));
+        $form->datetime('end_time', __('結束時間'))->default(date('Y-m-d H:i:s'));
+        $form->number('predict_second', __('預測執行秒數'))->default(0);
+        $form->number('run_second', __('實際執行秒數'))->default(1);
+        $form->number('qtime', __('Qtime'))->default(0);
+        $form->select('state', __('狀態'))->default('pending')->options([
+            'pending'  => '尚未審核', 
             'approve'   => '審核通過',
             'disapprove'=> '審核未通過',
             'process'   => '進行中',
@@ -114,7 +139,7 @@ class RunsController extends AdminController
         ]);
 
         $form->saving(function (Form $form) {
-            if ($form->state == 'process') {
+            if ($form->state == 'approve') {
                 $ProdProcessesList = ProdProcessesList::where('product_id', $form->product_id)
                                                         ->orderBy('order', 'asc')
                                                         ->get();
@@ -127,15 +152,15 @@ class RunsController extends AdminController
 
                     for ($i=0; $i < $count; $i++) { 
                         $batch = new Batches();
-                        $batch->batch_code = 'batch-'.uniqid();
+                        $batch->batch_code = $form->run_code.'_'.$i;
                         $batch->run_id = $form->run_code;
                         $batch->prod_processes_list_id = $process->id;
                         $batch->doer_id = $form->maker_id;
                         $batch->quantity = $each_quantity;
-                        $batch->start_time = $form->start_time;
-                        $batch->end_time = $form->end_time;
-                        $batch->run_second = $form->run_second;
-                        $batch->state = 'pedding';
+                        $batch->start_time = '1000-01-01 00:00:00';
+                        $batch->end_time = '1000-01-01 00:00:00';
+                        $batch->run_second = 0;
+                        $batch->state = 'pending';
                         $batch->save();
                     }
                 }

@@ -16,7 +16,7 @@ class StepsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Steps';
+    protected $title = '步驟(Steps)';
 
     /**
      * Make a grid builder.
@@ -28,15 +28,15 @@ class StepsController extends AdminController
         $grid = new Grid(new Steps());
 
         $grid->column('id', __('Id'));
-        $grid->column('Tools.name', __('Tool Name'));
+        $grid->column('Tools.name', __('機台名稱'));
         // $grid->column('tool_id', __('Tool id'));
-        $grid->column('name', __('Name'));
-        $grid->column('max_slot', __('Max slot'));
-        $grid->column('min_slot', __('Min slot'));
-        $grid->column('step_time', __('Step time'));
-        $grid->column('note', __('Note'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('name', __('步驟名稱'));
+        $grid->column('max_slot', __('最大量'));
+        $grid->column('min_slot', __('最小量'));
+        $grid->column('step_time', __('秒數'));
+        $grid->column('note', __('備註'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }

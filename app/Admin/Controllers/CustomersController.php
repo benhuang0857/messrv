@@ -15,7 +15,7 @@ class CustomersController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Customers';
+    protected $title = '客戶(Customers)';
 
     /**
      * Make a grid builder.
@@ -26,16 +26,16 @@ class CustomersController extends AdminController
     {
         $grid = new Grid(new Customers());
 
-        $grid->column('id', __('Id'));
-        $grid->column('company_name', __('Company name'));
-        $grid->column('contact_name', __('Contact name'));
-        $grid->column('phone', __('Phone'));
-        $grid->column('mobile', __('Mobile'));
-        $grid->column('gui_number', __('Gui number'));
-        $grid->column('address', __('Address'));
-        $grid->column('note', __('Note'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        // $grid->column('id', __('Id'));
+        $grid->column('company_name', __('公司'));
+        $grid->column('contact_name', __('客戶名'));
+        $grid->column('phone', __('市話'));
+        $grid->column('mobile', __('手機'));
+        $grid->column('gui_number', __('統編'));
+        $grid->column('address', __('地址'));
+        $grid->column('note', __('備註'));
+        $grid->column('created_at', __('建立時間'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }

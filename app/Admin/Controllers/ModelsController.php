@@ -15,7 +15,7 @@ class ModelsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Models';
+    protected $title = '規格(Models)';
 
     /**
      * Make a grid builder.
@@ -27,12 +27,12 @@ class ModelsController extends AdminController
         $grid = new Grid(new Models());
 
         $grid->column('id', __('Id'));
-        $grid->column('model_code', __('Model code'));
-        $grid->column('model_name', __('Model name'));
-        $grid->column('spec', __('Spec'));
-        $grid->column('note', __('Note'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('model_code', __('規格代碼'));
+        $grid->column('model_name', __('規格名稱'));
+        $grid->column('spec', __('SPEC'));
+        $grid->column('note', __('備註'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -67,10 +67,10 @@ class ModelsController extends AdminController
     {
         $form = new Form(new Models());
 
-        $form->text('model_code', __('Model code'));
-        $form->text('model_name', __('Model name'));
-        $form->textarea('spec', __('Spec'));
-        $form->textarea('note', __('Note'));
+        $form->text('model_code', __('規格代碼'));
+        $form->text('model_name', __('規格名稱'));
+        $form->textarea('spec', __('SPEC'));
+        $form->textarea('note', __('備註'));
 
         return $form;
     }

@@ -2,20 +2,20 @@
 
 namespace App\Admin\Controllers;
 
-use App\Staffs;
+use App\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class StaffsController extends AdminController
+class UserController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = '員工(Staffs)';
+    protected $title = 'User';
 
     /**
      * Make a grid builder.
@@ -24,10 +24,11 @@ class StaffsController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Staffs());
+        $grid = new Grid(new User());
 
         // $grid->column('id', __('Id'));
         $grid->column('employee_id', __('工號'));
+        $grid->column('email', __('Email'));
         $grid->column('name', __('姓名'));
         $grid->column('department', __('部門'));
         $grid->column('job_title', __('職稱'));
@@ -37,7 +38,6 @@ class StaffsController extends AdminController
         });
         $grid->column('note', __('備註'));
         $grid->column('created_at', __('建立時間'));
-        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -50,16 +50,19 @@ class StaffsController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Staffs::findOrFail($id));
+        $show = new Show(User::findOrFail($id));
 
         $show->field('id', __('Id'));
         $show->field('employee_id', __('Employee id'));
         $show->field('name', __('Name'));
+        $show->field('email', __('Email'));
         $show->field('department', __('Department'));
         $show->field('job_title', __('Job title'));
         $show->field('gender', __('Gender'));
         $show->field('state', __('State'));
         $show->field('note', __('Note'));
+        $show->field('password', __('Password'));
+        $show->field('remember_token', __('Remember token'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -73,18 +76,27 @@ class StaffsController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Staffs());
+        $form = new Form(new User());
 
         $form->text('employee_id', __('Employee id'));
         $form->text('name', __('Name'));
+        $form->email('email', __('Email'));
         $form->text('department', __('Department'));
         $form->text('job_title', __('Job title'));
-        $form->radio('gender', __('Gender'))->options([
-            'male' => '男',
-            'female' => '女',
-        ])->default('male');
+        $form->text('gender', __('Gender'));
         $form->switch('state', __('State'));
         $form->textarea('note', __('Note'));
+        $form->password('password', __('Password'));
+
+        $form->saving(function (Form $form) {
+            if ($form->password == null)
+            {
+                $form->password = $form->model()->password;
+            }
+            if ($form->password && $form->model()->password != $form->password) {
+                $form->password = bcrypt($form->password);
+            }
+        });
 
         return $form;
     }

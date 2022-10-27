@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\ProdProcessesList;
+use App\Products;
+use App\Processes;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +17,7 @@ class ProdProcessesListController extends AdminController
      *
      * @var string
      */
-    protected $title = 'ProdProcessesList';
+    protected $title = '產品生產流程(ProdProcessesList)';
 
     /**
      * Make a grid builder.
@@ -27,17 +29,17 @@ class ProdProcessesListController extends AdminController
         $grid = new Grid(new ProdProcessesList());
 
         $grid->column('id', __('Id'));
-        $grid->column('Products.product_code', __('Product id'));
-        $grid->column('Processes.process_code', __('Process id'));
-        $grid->column('order', __('Order'));
-        $grid->column('process_time', __('Process time'));
-        $grid->column('min_slot', __('Min slot'));
-        $grid->column('max_slot', __('Max slot'));
-        $grid->column('state', __('State'))->display(function($state){
+        $grid->column('Products.product_code', __('產品代碼'));
+        $grid->column('Processes.process_code', __('製程代碼'));
+        $grid->column('order', __('排序'));
+        $grid->column('process_time', __('執行秒數'));
+        $grid->column('min_slot', __('最少執行數量'));
+        $grid->column('max_slot', __('最多執行數量'));
+        $grid->column('state', __('狀態'))->display(function($state){
             return $state==1?'啟用':'停用';
         });
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -75,13 +77,27 @@ class ProdProcessesListController extends AdminController
     {
         $form = new Form(new ProdProcessesList());
 
-        $form->text('product_id', __('Product id'));
-        $form->text('process_id', __('Process id'));
-        $form->number('order', __('Order'));
-        $form->number('process_time', __('Process time'));
-        $form->number('max_slot', __('Max slot'));
-        $form->number('min_slot', __('Min slot'));
-        $form->switch('state', __('State'));
+        $_products = Products::all();
+        $_productMap = array();
+        foreach($_products as $item)
+        {
+            $_productMap[$item->id] = $item->product_code;
+        }
+
+        $_processes = Processes::all();
+        $_processMap = array();
+        foreach($_processes as $item)
+        {
+            $_processMap[$item->id] = $item->process_code;
+        }
+
+        $form->select('product_id', __('產品代碼'))->options($_productMap);
+        $form->select('process_id', __('製程代碼'))->options($_processMap);
+        $form->number('order', __('排序'))->default(0);
+        $form->number('process_time', __('執行秒數'))->default(0);
+        $form->number('max_slot', __('最少執行數量'))->default(0);
+        $form->number('min_slot', __('最多執行數量'))->default(0);
+        $form->switch('state', __('狀態'));
 
         return $form;
     }

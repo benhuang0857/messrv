@@ -16,7 +16,7 @@ class ProductsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Products';
+    protected $title = '產品(Products)';
 
     /**
      * Make a grid builder.
@@ -28,13 +28,13 @@ class ProductsController extends AdminController
         $grid = new Grid(new Products());
 
         $grid->column('id', __('Id'));
-        $grid->column('Models.model_code', __('Model Code'));
-        $grid->column('product_code', __('Product code'));
-        $grid->column('product_name', __('Product name'));
-        $grid->column('pic_path', __('Pic path'));
-        $grid->column('note', __('Note'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('Models.model_code', __('規格代碼'));
+        $grid->column('product_code', __('產品代碼'));
+        $grid->column('product_name', __('產品名稱'));
+        $grid->column('pic_path', __('產品圖片'));
+        $grid->column('note', __('備註'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -77,11 +77,11 @@ class ProductsController extends AdminController
             $_modelMap[$item->id] = $item->model_code;
         }
 
-        $form->select('model_id', __('Model id'))->options($_modelMap);
-        $form->text('product_code', __('Product code'));
-        $form->text('product_name', __('Product name'));
-        $form->image('pic_path', __('Pic path'));
-        $form->textarea('note', __('Note'));
+        $form->select('model_id', __('規格代碼'))->options($_modelMap);
+        $form->text('product_code', __('產品代碼'));
+        $form->text('product_name', __('產品名稱'));
+        $form->image('pic_path', __('產品圖片'));
+        $form->textarea('note', __('備註'));
 
         return $form;
     }

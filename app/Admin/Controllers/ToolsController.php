@@ -16,7 +16,7 @@ class ToolsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Tools';
+    protected $title = '機台(Tools)';
 
     /**
      * Make a grid builder.
@@ -28,13 +28,13 @@ class ToolsController extends AdminController
         $grid = new Grid(new Tools());
 
         $grid->column('id', __('Id'));
-        $grid->column('Vendors.company_name', __('Vendor Name'));
+        $grid->column('Vendors.company_name', __('供應商'));
         // $grid->column('vendor_id', __('Vendor id'));
-        $grid->column('name', __('Name'));
-        $grid->column('area', __('Area'));
-        $grid->column('note', __('Note'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('name', __('機台名稱'));
+        $grid->column('area', __('位置'));
+        $grid->column('note', __('備註'));
+        // $grid->column('created_at', __('Created at'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }

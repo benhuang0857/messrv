@@ -23,7 +23,7 @@ class CreateRunsTable extends Migration
             $table->datetime('start_time')->comment('開始時間');
             $table->datetime('end_time')->comment('開始時間');
             $table->integer('run_second')->default(0)->comment('實際秒數');
-            $table->string('state')->default('peddning')->comment('狀態(pedding/approve/disapprove/cancel)');
+            $table->string('state')->default('peddning')->comment('狀態(pending/approve/disapprove/cancel)');
             $table->timestamps();
         });
     }

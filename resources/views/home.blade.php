@@ -107,8 +107,15 @@
                     tool: tool,
                 },
                 success: function (response) {
-                    alert('開始執行');
-                    $(event).closest('.panel').css("background-color", "#e6fdd8")
+                    if(response == 'ok')
+                    {
+                        alert('開始執行');
+                        $(event).closest('.panel').css("background-color", "#e6fdd8")
+                    }
+                    else
+                    {
+                        alert('您無法執行此操作');
+                    }
                 },
                 error: function (thrownError) {
                     console.log(thrownError);

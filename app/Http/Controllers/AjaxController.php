@@ -7,6 +7,8 @@ use App\Batches;
 use App\BatchStateRecord;
 use Illuminate\Http\Request;
 
+use Auth;
+
 class AjaxController extends Controller
 {
     public function PredictTime(Request $req)
@@ -22,24 +24,37 @@ class AjaxController extends Controller
 
     public function ProcessStart(Request $req)
     {
-        $batch = Batches::where('id', $req->batchId)->first();
-        $batch->tool = $req->tool;
-        $batch->doer_id = $req->doer_id;
-        $batch->state = "process";
-        $batch->save();
-
-        $batchStateRecord = new BatchStateRecord();
-        $batchStateRecord->batch_id = $req->batchId;
-        $batchStateRecord->tool = $req->tool;
-        $batchStateRecord->user_id = $req->doer_id;
-        $batchStateRecord->state = "process";
-        $batchStateRecord->note = 'process';
-        $batchStateRecord->save();
-
-        // $batch->start_time = date('Y-m-d H:i:s');
-        // $batch->state = "process";
+        $canRun = false;
         
-        return json_encode('Start');
+        if (Auth::user()->id != NULL) {
+            if (Auth::user()->id == $req->doer_id) {
+                $canRun = true;
+            }else {
+                $canRun = false;
+            }
+        }else {
+            $canRun = true;
+        }
+
+        if ($canRun) {
+
+            $batch = Batches::where('id', $req->batchId)->first();
+            $batch->tool = $req->tool;
+            $batch->doer_id = $req->doer_id;
+            $batch->state = "process";
+            $batch->save();
+
+            $batchStateRecord = new BatchStateRecord();
+            $batchStateRecord->batch_id = $req->batchId;
+            $batchStateRecord->tool = $req->tool;
+            $batchStateRecord->user_id = $req->doer_id;
+            $batchStateRecord->state = "process";
+            $batchStateRecord->note = 'process';
+            $batchStateRecord->save();
+            return json_encode('ok');
+        }else {
+            return json_encode('ng');
+        }     
     }
 
     public function ProcessHold(Request $req)

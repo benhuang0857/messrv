@@ -137,8 +137,6 @@
         var doer = $(event).closest('form').find('select[name="doer_id"]').val();
         var holdReason = $(event).closest('form').find('select[name="hold_reason"]').val();
 
-        alert(holdReason);
-
         $.ajax({
             type: "GET",
             url: "/ajax/process_hold",

@@ -22,4 +22,9 @@ class Batches extends Model
     {
         return $this->hasOne('App\Staffs', 'id', 'doer_id');
     }
+
+    public function Records()
+    {
+        return $this->hasMany('App\BatchStateRecord', 'batch_id', 'id');
+    }
 }

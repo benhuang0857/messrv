@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddToolToBatchesTable extends Migration
+class AddAreaColToBatchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddToolToBatchesTable extends Migration
     public function up()
     {
         Schema::table('batches', function (Blueprint $table) {
-            $table->string('tool')->nullable()->comment('機台');
+            $table->string('area')->nullable()->comment('區域');
         });
     }
 
@@ -26,7 +26,7 @@ class AddToolToBatchesTable extends Migration
     public function down()
     {
         Schema::table('batches', function (Blueprint $table) {
-            $table->dropColumn('tool');
+            $table->dropColumn('area');
         });
     }
 }

@@ -40,9 +40,15 @@ class RunsController extends AdminController
         $grid->column('each_quantity', __('分批'));
         $grid->column('start_time', __('開始時間'));
         $grid->column('end_time', __('結束時間'));
-        $grid->column('predict_second', __('預估執行秒數'));
-        $grid->column('run_second', __('實際執行秒數'));
-        $grid->column('qtime', __('QTime'));
+        $grid->column('predict_second', __('預估執行秒數'))->display(function($time){
+            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
+        });
+        $grid->column('run_second', __('實際執行秒數'))->display(function($time){
+            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
+        });
+        $grid->column('qtime', __('限制秒數(QTime)'))->display(function($time){
+            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
+        });
         $grid->column('state', __('狀態'));
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
@@ -109,7 +115,8 @@ class RunsController extends AdminController
                     dataType: "json",
                     data:{pid: productId},
                     success: function (response) {
-                        $("input[name=predict_second]").val(response);
+                        var q = $("input[name=quantity]").val();
+                        $("input[name=predict_second]").val(response*q);
                     },
                     error: function (thrownError) {
                         console.log(thrownError);
@@ -127,13 +134,13 @@ class RunsController extends AdminController
         $form->datetime('end_time', __('結束時間'))->default(date('Y-m-d H:i:s'));
         $form->number('predict_second', __('預測執行秒數'))->default(0);
         $form->number('run_second', __('實際執行秒數'))->default(1);
-        $form->number('qtime', __('Qtime'))->default(0);
-        $form->select('state', __('狀態'))->default('pending')->options([
-            'pending'  => '尚未審核', 
-            'approve'   => '審核通過',
-            'disapprove'=> '審核未通過',
-            'process'   => '進行中',
-            'complete'  => '完成',
+        $form->number('qtime', __('限制秒數(QTime)'))->default(0);
+        $form->select('state', __('狀態'))->default('approve')->options([
+            'pending'  => '確認中', 
+            'approve'   => '等待加工',
+            'disapprove'=> '取消加工',
+            'process'   => '加工中',
+            'complete'  => '已完成',
             'hold'      => '暫停',
             'cancel'    => '取消',
         ]);
@@ -155,12 +162,12 @@ class RunsController extends AdminController
                         $batch->batch_code = $form->run_code.'_'.$i;
                         $batch->run_id = $form->run_code;
                         $batch->prod_processes_list_id = $process->id;
-                        $batch->doer_id = $form->maker_id;
+                        // $batch->doer_id = $form->maker_id;
                         $batch->quantity = $each_quantity;
                         $batch->start_time = '1000-01-01 00:00:00';
                         $batch->end_time = '1000-01-01 00:00:00';
                         $batch->run_second = 0;
-                        $batch->state = 'pending';
+                        $batch->state = 'approve';
                         $batch->save();
                     }
                 }

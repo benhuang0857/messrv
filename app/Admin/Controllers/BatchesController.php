@@ -11,6 +11,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
 
 class BatchesController extends AdminController
 {
@@ -31,7 +32,14 @@ class BatchesController extends AdminController
         $grid = new Grid(new Batches());
 
         // $grid->column('id', __('Id'));
-        $grid->column('batch_code', __('批號'));
+        $grid->column('batch_code', __('批號'))->expand(function ($model) {
+
+            $batches = $model->Records()->get()->map(function ($batch) {
+                return $batch->only(['tool', 'state', 'note', 'created_at']);
+            });
+        
+            return new Table(['機台', '狀態', '原因', '時間戳'], $batches->toArray());
+        });
         $grid->column('run_id', __('工單'));
         $grid->column('ProdProcessesList.order', __('製程順序'));
         $grid->column('ProdProcessesList.id', __('製程與產品'))->display(function($id){
@@ -43,15 +51,60 @@ class BatchesController extends AdminController
             return $processesName.'-'.$productsName;
         });
         $grid->column('doer_id', __('員工'))->display(function($id){
-            $staff = User::where('id', $id)->first();
-            return $staff->name.'('.$staff->employee_id.')';
+            if ($id != NULL) {
+                $staff = User::where('id', $id)->first();
+                return $staff->name.'('.$staff->employee_id.')';
+            } else {
+                return '尚未指派';
+            }
+            
         });
         $grid->column('quantity', __('數量'));
         $grid->column('scrap', __('報廢'));
-        $grid->column('start_time', __('開始時間'));
-        $grid->column('end_time', __('結束時間'));
-        $grid->column('run_second', __('執行時間'));
-        $grid->column('state', __('狀態'));
+        $grid->column('start_time', __('開始時間'))->display(function($start_time){
+            if ($start_time == '1000-01-01 00:00:00') {
+                return '--';
+            }
+            else
+            {
+                return $start_time;
+            }
+        });
+        $grid->column('end_time', __('結束時間'))->display(function($start_time){
+            if ($start_time == '1000-01-01 00:00:00') {
+                return '--';
+            }
+            else
+            {
+                return $start_time;
+            }
+        });
+        $grid->column('run_second', __('實際執行時間'))->display(function($time){
+            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
+        });
+        $grid->column('area', __('負責區域/部門'))->display(function($area){
+            if ($area == NULL) {
+                return '--';
+            }
+            else
+            {
+                return $area;
+            }
+            
+        });
+        $grid->column('state', __('狀態'))->display(function($state){
+            $stateArr = [
+                'pending'  => '確認中', 
+                'approve'   => '等待加工',
+                'disapprove'=> '取消加工',
+                'process'   => '加工中',
+                'complete'  => '已完成',
+                'hold'      => '暫停',
+                'cancel'    => '取消',
+            ];
+
+            return $stateArr[$state];
+        });
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 
@@ -93,10 +146,25 @@ class BatchesController extends AdminController
     {
         $form = new Form(new Batches());
 
-        $form->text('batch_code', __('批號'));
-        $form->text('run_id', __('工單'));
-        $form->text('prod_processes_list_id', __('製程與產品'));
-        $form->text('doer_id', __('員工'));
+        $_users = User::all();
+        $_userMap = array();
+        foreach($_users as $item)
+        {
+            $_userMap[$item->id] = $item->name.'('.$item->employee_id.')';
+        }
+
+        $_prodProcessesList = ProdProcessesList::all();
+        $_prodProcessesListMap = array();
+        foreach($_prodProcessesList as $item)
+        {
+            $_prodProcessesListMap[$item->id] = $item->Processes->process_code.'('.$item->Products->product_name.')';
+        }
+
+        $form->text('batch_code', __('批號'))->readonly();
+        $form->text('run_id', __('工單'))->readonly();
+        $form->select('prod_processes_list_id', __('製程與產品'))->options($_prodProcessesListMap)->readonly();
+        $form->select('doer_id', __('員工'))->options($_userMap);
+        $form->text('area', __('負責區域/部門'));
         $form->number('quantity', __('數量'))->default(1);
         $form->number('scrap', __('報廢'))->default(0);
         $form->datetime('start_time', __('開始時間'))->default(date('Y-m-d H:i:s'));

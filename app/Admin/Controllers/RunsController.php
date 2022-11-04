@@ -51,7 +51,16 @@ class RunsController extends AdminController
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
         });
         $grid->column('state', __('狀態'))->display(function($state){
-            return '<span class="badge badge-warning" style="background:red">'.$state.'</span>';
+            $stateArr = [
+                'pending'  => '確認中', 
+                'approve'   => '等待加工',
+                'disapprove'=> '取消加工',
+                'process'   => '加工中',
+                'complete'  => '已完成',
+                'hold'      => '暫停',
+                'cancel'    => '取消',
+            ];
+            return '<span class="badge badge-warning" style="background:red">'.$stateArr[$state].'</span>';
         });
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));

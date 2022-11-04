@@ -50,7 +50,9 @@ class RunsController extends AdminController
         $grid->column('qtime', __('限制秒數(QTime)'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
         });
-        $grid->column('state', __('狀態'));
+        $grid->column('state', __('狀態'))->display(function($state){
+            return '<span class="badge badge-warning" style="background:red">'.$state.'</span>';
+        });
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

@@ -32,6 +32,21 @@ class BatchesController extends AdminController
     {
         $grid = new Grid(new Batches());
 
+        $grid->filter(function($filter){
+            $_products = Products::all();
+            $_productMap = array();
+            foreach($_products as $item)
+            {
+                $_productMap[$item->id] = $item->product_name;
+            }
+
+            $filter->disableIdFilter();
+            $filter->equal('ProdProcessesList.product_id', '產品')->select($_productMap);
+            $filter->where(function ($query) {
+                $query->where('batch_code', 'like', "%{$this->input}%");
+            }, '批號');
+        });
+
         $grid->column('batch_code', __('批號'))->expand(function ($model) {
             $record = array();
             $startrecords = $model->Records()->where('state', 'starthold')->get();

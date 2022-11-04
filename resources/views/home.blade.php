@@ -108,9 +108,10 @@
                                             <label for="hold_reason">暫停原因</label>
                                             <select class="form-control" name="hold_reason">
                                                 <option value="None">無</option>
-                                                <option value="PM">機台PM</option>
-                                                <option value="Error">機台異常</option>
-                                                <option value="Break">休息</option>
+                                                <option value="機台PM">機台PM</option>
+                                                <option value="機台異常">機台異常</option>
+                                                <option value="用餐">用餐</option>
+                                                <option value="休息">休息</option>
                                             </select>
                                         </div>                                        
                                         <?php
@@ -139,9 +140,47 @@
                                         }
                                         ?>
                                         {!!$buttonHtm!!}
-                                        {{-- <a type="submit" class="btn btn-primary" onclick="process(this)">執行</a>
-                                        <a type="submit" class="btn btn-danger" onclick="hold(this)" disabled>暫停</a>
-                                        <a type="submit" class="btn btn-success" onclick="complete(this)" disabled>完成</a> --}}
+                                        
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                <th scope="col">開始暫停</th>
+                                                <th scope="col">結束暫停</th>
+                                                <th scope="col">原因</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            <?php
+                                            $record = array();
+                                            $startrecords = $batch->Records()->where('state', 'starthold')->get();
+                                            $eedrecords = $batch->Records()->where('state', 'endhold')->get();
+                                            
+                                            try {
+                                                for ($i=0; $i < sizeof($startrecords); $i++) { 
+                                                    $start = $startrecords[$i]->created_at;
+                                                    $end = $eedrecords[$i]->created_at;
+                                                    array_push($record, [
+                                                        'start' => $start,
+                                                        'end' => $end,
+                                                        'note' => $startrecords[$i]->note,
+                                                        'sum' => $start->diffInSeconds($end).'秒(約等於'.round((($start->diffInSeconds($end))/60), 2).'分鐘)',
+                                                    ]);
+                                                }
+                                            } catch (\Throwable $th) {
+                                                //throw $th;
+                                            }
+                                            ?>
+
+                                            @foreach ($record as $case)
+                                                <tr>
+                                                    <th>{{$case['start']}}</th>
+                                                    <th>{{$case['end']}}</th>
+                                                    <th>{{$case['note']}}</th>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
                                     </form>
                                     </div>
                                 </div>

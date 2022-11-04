@@ -33,7 +33,6 @@ class HomeController extends Controller
         $batches = Batches::orwhere('doer_id', $uId)
                             ->orwhere('area', $user->department)
                             ->get();
-        //dd($batches);
         
         $doers = User::where('department', $user->department)->get();
 

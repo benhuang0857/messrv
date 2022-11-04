@@ -89,6 +89,9 @@ class BatchesController extends AdminController
         });
         $grid->column('quantity', __('數量'));
         $grid->column('scrap', __('報廢'));
+        $grid->column('run_second', __('總時間'))->display(function($time){
+            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
+        })->width(100);
         $grid->column('id', __('總休息時間'))->display(function($id){
             try {
 
@@ -108,9 +111,7 @@ class BatchesController extends AdminController
                 return "--";
             }
         })->width(100);
-        $grid->column('run_second', __('總時間'))->display(function($time){
-            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        })->width(100);
+        
         $grid->column('RealTime', __('實際時間'))->display(function($Records){
             try {
                 $batch_id = $Records[0]['batch_id'];

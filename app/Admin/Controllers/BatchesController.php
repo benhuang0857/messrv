@@ -289,7 +289,10 @@ class BatchesController extends AdminController
         $form->text('run_id', __('工單'))->readonly();
         $form->select('prod_processes_list_id', __('製程與產品'))->options($_prodProcessesListMap)->readonly();
         $form->select('doer_id', __('員工'))->options($_userMap);
-        $form->text('area', __('負責區域/部門'));
+        $form->select('area', __('負責區域/部門'))->options([
+            'PHOTO',
+            'CVD'
+        ]);
         $form->number('quantity', __('數量'))->default(1);
         $form->number('scrap', __('報廢'))->default(0);
         $form->datetime('start_time', __('開始時間'))->default(date('Y-m-d H:i:s'));

@@ -18,5 +18,6 @@ Route::get('/', function () {
 });
 Route::get('/ajax/predicttime', 'AjaxController@PredictTime');
 Route::get('/ajax/process_start', 'AjaxController@ProcessStart');
-Route::get('/ajax/process_hold', 'AjaxController@ProcessHold');
+Route::get('/ajax/process_starthold', 'AjaxController@StartProcessHold');
+Route::get('/ajax/process_endhold', 'AjaxController@EndProcessHold');
 Route::get('/ajax/process_complete', 'AjaxController@ProcessComplete');

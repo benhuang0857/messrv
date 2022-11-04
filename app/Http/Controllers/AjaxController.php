@@ -57,7 +57,7 @@ class AjaxController extends Controller
         }     
     }
 
-    public function ProcessHold(Request $req)
+    public function StartProcessHold(Request $req)
     {
         $batch = Batches::where('id', $req->batchId)->first();
         // $batch->end_time = date('Y-m-d H:i:s');
@@ -68,17 +68,53 @@ class AjaxController extends Controller
         $batchStateRecord->batch_id = $req->batchId;
         $batchStateRecord->tool = $req->tool;
         $batchStateRecord->user_id = $req->doer_id;
-        $batchStateRecord->state = "hold";
+        $batchStateRecord->state = "starthold";
         $batchStateRecord->note = $req->holdReason;
         $batchStateRecord->save();
 
-        return json_encode('End');
+        return json_encode('StartHold');
     }
+
+    public function EndProcessHold(Request $req)
+    {
+        $batch = Batches::where('id', $req->batchId)->first();
+        // $batch->end_time = date('Y-m-d H:i:s');
+        $batch->state = "process";
+        $batch->save();
+        
+        $batchStateRecord = new BatchStateRecord();
+        $batchStateRecord->batch_id = $req->batchId;
+        $batchStateRecord->tool = $req->tool;
+        $batchStateRecord->user_id = $req->doer_id;
+        $batchStateRecord->state = "endhold";
+        $batchStateRecord->note = $req->holdReason;
+        $batchStateRecord->save();
+
+        return json_encode('EndHold');
+    }
+
 
     public function ProcessComplete(Request $req)
     {
         $batch = Batches::where('id', $req->batchId)->first();
-        $batch->end_time = date('Y-m-d H:i:s');
+
+        $record = new BatchStateRecord();
+        $batchStateRecord = new BatchStateRecord();
+        $batchStateRecord->batch_id = $req->batchId;
+        $batchStateRecord->tool = $req->tool;
+        $batchStateRecord->user_id = $req->doer_id;
+        $batchStateRecord->state = "complete";
+        $batchStateRecord->note = "complete";
+        $batchStateRecord->save();
+
+        $firstProcessRecord = BatchStateRecord::where('batch_id', $req->batchId)
+                                            ->where('state', 'process')->first();
+        $firstCompleteRecord = BatchStateRecord::where('batch_id', $req->batchId)
+                                            ->where('state', 'complete')->first();
+        $batch->start_time = $firstProcessRecord->created_at;
+        $batch->end_time = $firstCompleteRecord->created_at;
+        $interval = strtotime($firstCompleteRecord->created_at) - strtotime($firstProcessRecord->created_at);
+        $batch->run_second = $interval;
         $batch->state = "complete";
         $batch->save();
 

@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Batches;
+use App\BatchStateRecord;
 use App\Products;
 use App\Processes;
 use App\User;
@@ -31,17 +32,30 @@ class BatchesController extends AdminController
     {
         $grid = new Grid(new Batches());
 
-        // $grid->column('id', __('Id'));
         $grid->column('batch_code', __('批號'))->expand(function ($model) {
-
-            $batches = $model->Records()->get()->map(function ($batch) {
-                return $batch->only(['tool', 'state', 'note', 'created_at']);
-            });
-        
-            return new Table(['機台', '狀態', '原因', '時間戳'], $batches->toArray());
+            $record = array();
+            $startrecords = $model->Records()->where('state', 'starthold')->get();
+            $eedrecords = $model->Records()->where('state', 'endhold')->get();
+            
+            try {
+                for ($i=0; $i < sizeof($startrecords); $i++) { 
+                    $start = $startrecords[$i]->created_at;
+                    $end = $eedrecords[$i]->created_at;
+                    array_push($record, [
+                        'start' => $start,
+                        'end' => $end,
+                        'note' => $startrecords[$i]->note,
+                        'sum' => $start->diffInSeconds($end).'秒(約等於'.round((($start->diffInSeconds($end))/60), 2).'分鐘)',
+                    ]);
+                }
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            
+            return new Table(['開始','結束', '原因','總工時'], $record);
         });
         $grid->column('run_id', __('工單'));
-        $grid->column('ProdProcessesList.order', __('製程順序'));
+        $grid->column('ProdProcessesList.order', __('製程順序'))->width(50);
         $grid->column('ProdProcessesList.id', __('製程與產品'))->display(function($id){
             $prodProcessesList = ProdProcessesList::where('id', $id)->first();
             $processId = $prodProcessesList->process_id;
@@ -49,7 +63,7 @@ class BatchesController extends AdminController
             $processesName = Processes::where('id', $processId)->first()->name;
             $productsName = Products::where('id', $productId)->first()->product_code;
             return $processesName.'-'.$productsName;
-        });
+        })->width(100);
         $grid->column('doer_id', __('員工'))->display(function($id){
             if ($id != NULL) {
                 $staff = User::where('id', $id)->first();
@@ -57,10 +71,108 @@ class BatchesController extends AdminController
             } else {
                 return '尚未指派';
             }
-            
         });
         $grid->column('quantity', __('數量'));
         $grid->column('scrap', __('報廢'));
+        $grid->column('id', __('總休息時間'))->display(function($id){
+            try {
+
+                $startrecords = BatchStateRecord::where('batch_id', $id)
+                                                ->where('state', 'starthold')->get();
+                $eedrecords = BatchStateRecord::where('batch_id', $id)
+                                                ->where('state', 'endhold')->get();
+                $restSec = 0;
+                for ($i=0; $i < sizeof($startrecords); $i++) { 
+                    $start = $startrecords[$i]->created_at;
+                    $end = $eedrecords[$i]->created_at;
+                    $restSec += $start->diffInSeconds($end);
+                }
+
+                return $restSec.'秒(約等於'.round(($restSec/60), 2).'分鐘)';
+            } catch (\Throwable $th) {
+                return "--";
+            }
+        })->width(100);
+        $grid->column('run_second', __('總時間'))->display(function($time){
+            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
+        })->width(100);
+        $grid->column('RealTime', __('實際時間'))->display(function($Records){
+            try {
+                $batch_id = $Records[0]['batch_id'];
+                $run_second = Batches::where('id', $batch_id)->first()->run_second;
+
+                $startrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'starthold')->get();
+                $eedrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'endhold')->get();
+                $restSec = 0;
+                for ($i=0; $i < sizeof($startrecords); $i++) { 
+                    $start = $startrecords[$i]->created_at;
+                    $end = $eedrecords[$i]->created_at;
+                    $restSec += $start->diffInSeconds($end);
+                }
+
+                return ($run_second - $restSec).'秒(約等於'.round((($run_second - $restSec)/60), 2).'分鐘)';
+            } catch (\Throwable $th) {
+                return "--";
+            }
+            
+        })->width(100);
+
+        $grid->column('PiceTime', __('單位工時'))->display(function($Records){
+            try {
+                $batch_id = $Records[0]['batch_id'];
+                $pice = Batches::where('id', $batch_id)->first()->quantity;
+                $run_second = Batches::where('id', $batch_id)->first()->run_second;
+
+                $startrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'starthold')->get();
+                $eedrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'endhold')->get();
+                $restSec = 0;
+                for ($i=0; $i < sizeof($startrecords); $i++) { 
+                    $start = $startrecords[$i]->created_at;
+                    $end = $eedrecords[$i]->created_at;
+                    $restSec += $start->diffInSeconds($end);
+                }
+
+                return round(($pice/($run_second - $restSec)),2)  .'秒';
+            } catch (\Throwable $th) {
+                return "--";
+            }
+            
+        })->width(100);
+
+        $grid->column('ProdProcessesList.process_time', __('標準工時'))->display(function($process_time){
+            return $process_time.'秒';
+        })->width(100);
+
+        $grid->column('DiffTime', __('超前工時'))->display(function($Records){
+            try {
+                $batch_id = $Records[0]['batch_id'];
+                $ppId = Batches::where('id', $batch_id)->first()->prod_processes_list_id;
+                $process_time = ProdProcessesList::where('id', $ppId)->first()->process_time;
+                $pice = Batches::where('id', $batch_id)->first()->quantity;
+                $run_second = Batches::where('id', $batch_id)->first()->run_second;
+
+                $startrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'starthold')->get();
+                $eedrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'endhold')->get();
+                $restSec = 0;
+                for ($i=0; $i < sizeof($startrecords); $i++) { 
+                    $start = $startrecords[$i]->created_at;
+                    $end = $eedrecords[$i]->created_at;
+                    $restSec += $start->diffInSeconds($end);
+                }
+
+                return round((($pice/($run_second - $restSec)) - $process_time),2)  .'秒';
+            } catch (\Throwable $th) {
+                return "--";
+            }
+            
+        })->width(100);
+
         $grid->column('start_time', __('開始時間'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
                 return '--';
@@ -69,7 +181,7 @@ class BatchesController extends AdminController
             {
                 return $start_time;
             }
-        });
+        })->width(100);
         $grid->column('end_time', __('結束時間'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
                 return '--';
@@ -78,10 +190,7 @@ class BatchesController extends AdminController
             {
                 return $start_time;
             }
-        });
-        $grid->column('run_second', __('實際執行時間'))->display(function($time){
-            return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        });
+        })->width(100);
         $grid->column('area', __('負責區域/部門'))->display(function($area){
             if ($area == NULL) {
                 return '--';

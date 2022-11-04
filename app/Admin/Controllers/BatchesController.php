@@ -59,7 +59,7 @@ class BatchesController extends AdminController
                     array_push($record, [
                         'start' => $start,
                         'end' => $end,
-                        'note' => '<span class="badge badge-warning">'.$startrecords[$i]->note.'</span>',
+                        'note' => '<span class="badge badge-warning" style="background:red">'.$startrecords[$i]->note.'</span>',
                         'sum' => $start->diffInSeconds($end).'秒(約等於'.round((($start->diffInSeconds($end))/60), 2).'分鐘)',
                     ]);
                 }

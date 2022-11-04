@@ -227,8 +227,8 @@ class BatchesController extends AdminController
                 'hold'      => '暫停',
                 'cancel'    => '取消',
             ];
-
-            return $stateArr[$state];
+            return '<span class="badge badge-warning" style="background:blue">'.$stateArr[$state].'</span>';
+            // return $stateArr[$state];
         });
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));

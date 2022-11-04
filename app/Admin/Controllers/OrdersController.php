@@ -30,7 +30,14 @@ class OrdersController extends AdminController
     {
         $grid = new Grid(new Orders());
 
-        // $grid->column('id', __('Id'));
+        $grid->filter(function($filter){
+            $filter->disableIdFilter();
+            $filter->like('Customer.company_name', '廠商');
+            $filter->where(function ($query) {
+                $query->where('order_code', 'like', "%{$this->input}%");
+            }, '訂單號');
+        });
+        
         $grid->column('id', __('訂單'))->expand(function ($model) {
             $runs = $model->Runs()->get()->map(function ($run) {
                 $product = Products::where('id', $run->product_id)->first();
@@ -40,10 +47,13 @@ class OrdersController extends AdminController
                         
             return new Table(['商品','數量', '每箱數量','開始時間', '結束時間'], $runs->toArray());
         });
-        $grid->column('order_code', __('Order code'));
-        $grid->column('customer_id', __('Customer id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('order_code', __('訂單號'));
+        $grid->column('customer_id', __('廠商'))->display(function($customer_id){
+            $customer = Customers::where('id', $customer_id)->first();
+            return $customer->company_name;
+        });
+        $grid->column('created_at', __('建立時間'));
+        // $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }

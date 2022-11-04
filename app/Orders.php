@@ -10,7 +10,7 @@ class Orders extends Model
 
     public function Runs()
     {
-        return $this->hasOne('App\Runs', 'id', 'run_id');
+        return $this->hasMany('App\Runs', 'order_id', 'id');
     }
 
     public function Customer()

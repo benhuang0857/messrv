@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Runs;
+use App\Orders;
 use App\Batches;
 use App\User;
 use App\Products;
@@ -105,6 +106,13 @@ class RunsController extends AdminController
             $_producMap[$item->id] = $item->product_code;
         }
 
+        $_orders = Orders::all();
+        $_orderMap = array();
+        foreach($_orders as $item)
+        {
+            $_orderMap[$item->id] = $item->order_code;
+        }
+
         Admin::script('
             $("select[name=product_id]").change(function(){
                 var productId = $("select[name=product_id]").val();
@@ -125,6 +133,7 @@ class RunsController extends AdminController
             });
         ');
 
+        $form->select('order_id', __('訂單ID'))->options($_orderMap);
         $form->text('run_code', __('工單ID'))->default(uniqid());
         $form->select('maker_id', __('建立者'))->options($_staffMap);
         $form->select('product_id', __('產品'))->options($_producMap);

@@ -5,10 +5,12 @@ namespace App\Admin\Controllers;
 use App\Orders;
 use App\Runs;
 use App\Customers;
+use App\Products;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Table;
 
 class OrdersController extends AdminController
 {
@@ -28,7 +30,16 @@ class OrdersController extends AdminController
     {
         $grid = new Grid(new Orders());
 
-        $grid->column('id', __('Id'));
+        // $grid->column('id', __('Id'));
+        $grid->column('id', __('訂單'))->expand(function ($model) {
+            $runs = $model->Runs()->get()->map(function ($run) {
+                $product = Products::where('id', $run->product_id)->first();
+                $run['product_id'] = $product->product_name;
+                return $run->only(['product_id', 'quantity', 'each_quantity', 'start_time', 'end_time']);
+            });
+                        
+            return new Table(['商品','數量', '每箱數量','開始時間', '結束時間'], $runs->toArray());
+        });
         $grid->column('order_code', __('Order code'));
         $grid->column('customer_id', __('Customer id'));
         $grid->column('created_at', __('Created at'));

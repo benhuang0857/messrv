@@ -17,7 +17,6 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->string('order_code');
             $table->string('customer_id');
-            $table->string('run_id');
             $table->timestamps();
         });
     }

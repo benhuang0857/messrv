@@ -27,4 +27,5 @@ Route::group([
     $router->resource('batches', BatchesController::class);
 
     $router->resource('orders', OrdersController::class);
+    $router->resource('batch-state-records', BatchStateRecordController::class);
 });

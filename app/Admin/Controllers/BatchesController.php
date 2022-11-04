@@ -298,7 +298,7 @@ class BatchesController extends AdminController
         $form->datetime('start_time', __('開始時間'))->default(date('Y-m-d H:i:s'));
         $form->datetime('end_time', __('結束時間'))->default(date('Y-m-d H:i:s'));
         $form->number('run_second', __('執行秒數'));
-        $form->text('state', __('狀態'))->default('peddning');
+        $form->text('state', __('狀態'))->default('peddning')->readonly();
 
         return $form;
     }

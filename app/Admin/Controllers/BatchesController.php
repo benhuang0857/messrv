@@ -89,6 +89,24 @@ class BatchesController extends AdminController
         });
         $grid->column('quantity', __('數量'));
         $grid->column('scrap', __('報廢'));
+        $grid->column('start_time', __('開始時間'))->display(function($start_time){
+            if ($start_time == '1000-01-01 00:00:00') {
+                return '--';
+            }
+            else
+            {
+                return $start_time;
+            }
+        })->width(100);
+        $grid->column('end_time', __('結束時間'))->display(function($start_time){
+            if ($start_time == '1000-01-01 00:00:00') {
+                return '--';
+            }
+            else
+            {
+                return $start_time;
+            }
+        })->width(100);
         $grid->column('run_second', __('總時間'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
         })->width(100);
@@ -189,24 +207,6 @@ class BatchesController extends AdminController
             
         })->width(100);
 
-        $grid->column('start_time', __('開始時間'))->display(function($start_time){
-            if ($start_time == '1000-01-01 00:00:00') {
-                return '--';
-            }
-            else
-            {
-                return $start_time;
-            }
-        })->width(100);
-        $grid->column('end_time', __('結束時間'))->display(function($start_time){
-            if ($start_time == '1000-01-01 00:00:00') {
-                return '--';
-            }
-            else
-            {
-                return $start_time;
-            }
-        })->width(100);
         $grid->column('area', __('負責區域/部門'))->display(function($area){
             if ($area == NULL) {
                 return '--';

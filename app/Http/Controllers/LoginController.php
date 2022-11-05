@@ -41,6 +41,8 @@ class LoginController extends Controller
                     'name' => $user_profile['displayName'],
                     'line_id' => $user_profile['userId'],
                 ]);
+                $theUser = User::where('line_id', $user_profile['userId'])->first();
+                Auth::login($theUser);
                 return redirect('/');
             }
             else {

@@ -37,20 +37,23 @@ class AjaxController extends Controller
         }
 
         if ($canRun) {
-
-            $batch = Batches::where('id', $req->batchId)->first();
-            $batch->tool = $req->tool;
-            $batch->doer_id = $req->doer_id;
-            $batch->state = "process";
-            $batch->save();
-
             $batchStateRecord = new BatchStateRecord();
             $batchStateRecord->batch_id = $req->batchId;
             $batchStateRecord->tool = $req->tool;
             $batchStateRecord->user_id = $req->doer_id;
             $batchStateRecord->state = "process";
-            $batchStateRecord->note = 'process';
+            $batchStateRecord->note = '進行中';
             $batchStateRecord->save();
+
+            $batch = Batches::where('id', $req->batchId)->first();
+            $batch->start_time = BatchStateRecord::where('batch_id', $req->batchId)
+                                                    ->where('state', 'process')
+                                                    ->first()->created_at;
+            $batch->tool = $req->tool;
+            $batch->doer_id = $req->doer_id;
+            $batch->state = "process";
+            $batch->save();
+
             return json_encode('ok');
         }else {
             return json_encode('ng');
@@ -61,7 +64,7 @@ class AjaxController extends Controller
     {
         $batch = Batches::where('id', $req->batchId)->first();
         // $batch->end_time = date('Y-m-d H:i:s');
-        $batch->state = "hold";
+        $batch->state = "starthold";
         $batch->save();
         
         $batchStateRecord = new BatchStateRecord();

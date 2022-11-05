@@ -224,7 +224,8 @@ class BatchesController extends AdminController
                 'disapprove'=> '取消加工',
                 'process'   => '加工中',
                 'complete'  => '已完成',
-                'hold'      => '暫停',
+                'starthold' => '開始暫停',
+                'endhold'   => '結束暫停(執行中)',
                 'cancel'    => '取消',
             ];
             return '<span class="badge badge-warning" style="background:blue">'.$stateArr[$state].'</span>';
@@ -290,8 +291,8 @@ class BatchesController extends AdminController
         $form->select('prod_processes_list_id', __('製程與產品'))->options($_prodProcessesListMap)->readonly();
         $form->select('doer_id', __('員工'))->options($_userMap);
         $form->select('area', __('負責區域/部門'))->options([
-            'PHOTO',
-            'CVD'
+            'PHOTO' => 'PHOTO',
+            'CVD' => 'CVD'
         ]);
         $form->number('quantity', __('數量'))->default(1);
         $form->number('scrap', __('報廢'))->default(0);

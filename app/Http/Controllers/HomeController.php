@@ -37,22 +37,24 @@ class HomeController extends Controller
         $doers = User::where('department', $user->department)->get();
 
         $state = [
-            'pending'  => '確認中', 
+            'pending'   => '確認中', 
             'approve'   => '等待加工',
             'disapprove'=> '取消加工',
             'process'   => '加工中',
             'complete'  => '已完成',
-            'hold'      => '暫停',
+            'starthold' => '暫停',
+            'endhold'   => '暫停',
             'cancel'    => '取消',
         ];
 
         $color = [
-            'pending'  => 'orange', 
+            'pending'   => 'orange', 
             'approve'   => '#3097D1',
             'disapprove'=> 'orange',
             'process'   => '#3097D1',
             'complete'  => 'green',
-            'hold'      => 'orange',
+            'starthold' => 'orange',
+            'endhold'   => 'orange',
             'cancel'    => 'red',
         ];
 

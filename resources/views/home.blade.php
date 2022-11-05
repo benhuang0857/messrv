@@ -45,6 +45,12 @@
                                 ?>
                             @endif
 
+                            @if (!isset($_GET['show']))
+                                <?php
+                                    $_GET['show'] = 'all';
+                                ?>
+                            @endif
+
                             @if ($_GET['show'] == $batch->state)
                                 <div class="panel panel-default" {!!$background!!}>
                                     <div class="panel-heading">

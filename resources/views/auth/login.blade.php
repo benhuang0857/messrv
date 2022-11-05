@@ -55,9 +55,11 @@
                                     Login
                                 </button>
 
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                <a href="/line"><img width=120 class="mb-4" src="https://www.fightk.com/images/btn_login_base.png"></a>
+
+                                {{-- <a class="btn btn-link" href="{{ route('password.request') }}">
                                     Forgot Your Password?
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </form>

@@ -27,16 +27,65 @@ class UserController extends AdminController
         $grid = new Grid(new User());
 
         // $grid->column('id', __('Id'));
-        $grid->column('employee_id', __('工號'));
-        $grid->column('email', __('Email'));
+        $grid->column('line_id', __('Line Id'))->display(function($value){
+            if ($value != NULL) {
+                return $value;
+            }
+            else
+            {
+                return '--';
+            }
+        });
+        $grid->column('employee_id', __('工號'))->display(function($value){
+            if ($value != NULL) {
+                return $value;
+            }
+            else
+            {
+                return '--';
+            }
+        });
+        $grid->column('email', __('Email'))->display(function($value){
+            if ($value != NULL) {
+                return $value;
+            }
+            else
+            {
+                return '--';
+            }
+        });
         $grid->column('name', __('姓名'));
-        $grid->column('department', __('部門'));
+        $grid->column('department', __('部門'))->display(function($value){
+            if ($value != NULL) {
+                return $value;
+            }
+            else
+            {
+                return '--';
+            }
+        });
         $grid->column('job_title', __('職稱'));
-        $grid->column('gender', __('姓名'));
+        $grid->column('gender', __('姓名'))->display(function($value){
+            if ($value != NULL) {
+                return $value;
+            }
+            else
+            {
+                return '--';
+            }
+        });
         $grid->column('state', __('狀態'))->display(function($state){
             return $state==1 ? '通過':'未通過';
         });
-        $grid->column('note', __('備註'));
+        $grid->column('note', __('備註'))->display(function($value){
+            if ($value != NULL) {
+                return $value;
+            }
+            else
+            {
+                return '--';
+            }
+        });
         $grid->column('created_at', __('建立時間'));
 
         return $grid;

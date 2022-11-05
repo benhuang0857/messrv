@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth');        
     }
 
     /**
@@ -27,6 +27,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->state != 1) {
+            return redirect('/');
+        }
+
         $user = Auth::user();
         $uId = $user->id;
 

@@ -52,6 +52,7 @@ class OrdersController extends AdminController
             $customer = Customers::where('id', $customer_id)->first();
             return $customer->company_name;
         });
+        $grid->column('status', __('狀態'));
         $grid->column('created_at', __('建立時間'));
         // $grid->column('updated_at', __('Updated at'));
 

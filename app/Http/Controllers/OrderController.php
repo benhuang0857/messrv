@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function all(Request $req)
+    {
+        try {
+            return json_encode(Orders::all());
+        } catch (\Throwable $th) {
+            return json_encode('err');
+        }
+    }
+
     public function update(Request $req)
     {
         try {

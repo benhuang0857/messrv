@@ -104,6 +104,8 @@ class OrdersController extends AdminController
         $form->text('order_code', __('訂單號'))->default(uniqid());
         $form->select('customer_id', __('客戶'))->options($_customerMap);
 
+        $form->text('status', __('狀態'));
+
         return $form;
     }
 }

@@ -9,8 +9,14 @@ class OrderController extends Controller
 {
     public function update(Request $req)
     {
-        $order = Orders::where('id', $req->id)->first();
-        $order->status = 'complete';
-        $order->save();
+        try {
+            $order = Orders::where('id', $req->id)->first();
+            $order->status = 'complete';
+            $order->save();
+
+            return json_encode('sucess');
+        } catch (\Throwable $th) {
+            return json_encode('err');
+        }
     }
 }

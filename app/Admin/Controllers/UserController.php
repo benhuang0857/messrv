@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Admin;
 
 class UserController extends AdminController
 {
@@ -27,7 +28,7 @@ class UserController extends AdminController
         $grid = new Grid(new User());
 
         // $grid->column('id', __('Id'));
-        $grid->column('line_id', __('Line Id'))->display(function($value){
+        $grid->column('line_id', __('<a href="#">Line Id▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }
@@ -35,8 +36,8 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        })->sortable();
-        $grid->column('employee_id', __('工號'))->display(function($value){
+        });
+        $grid->column('employee_id', __('<a href="#">工號▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }
@@ -44,8 +45,8 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        })->sortable();
-        $grid->column('email', __('Email'))->display(function($value){
+        });
+        $grid->column('email', __('<a href="#">Email▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }
@@ -53,9 +54,9 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        })->sortable();
-        $grid->column('name', __('姓名'))->sortable();
-        $grid->column('department', __('部門'))->display(function($value){
+        });
+        $grid->column('name', __('<a href="#">姓名▼</a>'));
+        $grid->column('department', __('<a href="#">部門▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }
@@ -63,9 +64,9 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        })->sortable();
-        $grid->column('job_title', __('職稱'))->sortable();
-        $grid->column('gender', __('姓名'))->display(function($value){
+        });
+        $grid->column('job_title', __('<a href="#">職稱▼</a>'));
+        $grid->column('gender', __('<a href="#">姓名▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }
@@ -73,11 +74,11 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        })->sortable();
-        $grid->column('state', __('狀態'))->display(function($state){
+        });
+        $grid->column('state', __('<a href="#">狀態▼</a>'))->display(function($state){
             return $state==1 ? '通過':'未通過';
-        })->sortable();
-        $grid->column('note', __('備註'))->display(function($value){
+        });
+        $grid->column('note', __('<a href="#">備註▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }
@@ -85,8 +86,14 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        })->sortable();
-        $grid->column('created_at', __('建立時間'))->sortable();
+        });
+        $grid->column('created_at', __('<a href="#">建立時間▼</a>'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

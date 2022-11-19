@@ -13,6 +13,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Encore\Admin\Admin;
 
 class BatchesController extends AdminController
 {
@@ -47,7 +48,7 @@ class BatchesController extends AdminController
             }, '批號');
         });
 
-        $grid->column('batch_code', __('批號'))->expand(function ($model) {
+        $grid->column('batch_code', __('<a href="#">批號▼</a>'))->expand(function ($model) {
             $record = array();
             $startrecords = $model->Records()->where('state', 'starthold')->get();
             $eedrecords = $model->Records()->where('state', 'endhold')->get();
@@ -68,28 +69,28 @@ class BatchesController extends AdminController
             }
             
             return new Table(['開始','結束', '原因','總工時'], $record);
-        })->sortable();
-        $grid->column('run_id', __('工單'))->sortable();
-        $grid->column('ProdProcessesList.order', __('製程順序'))->sortable();
-        $grid->column('ProdProcessesList.id', __('製程與產品'))->display(function($id){
+        });
+        $grid->column('run_id', __('<a href="#">工單▼</a>'));
+        $grid->column('ProdProcessesList.order', __('<a href="#">製程順序▼</a>'));
+        $grid->column('ProdProcessesList.id', __('<a href="#">製程與產品▼</a>'))->display(function($id){
             $prodProcessesList = ProdProcessesList::where('id', $id)->first();
             $processId = $prodProcessesList->process_id;
             $productId = $prodProcessesList->product_id;
             $processesName = Processes::where('id', $processId)->first()->name;
             $productsName = Products::where('id', $productId)->first()->product_code;
             return $processesName.'-'.$productsName;
-        })->sortable();
-        $grid->column('doer_id', __('員工'))->display(function($id){
+        });
+        $grid->column('doer_id', __('<a href="#">員工▼</a>'))->display(function($id){
             if ($id != NULL) {
                 $staff = User::where('id', $id)->first();
                 return $staff->name.'('.$staff->employee_id.')';
             } else {
                 return '尚未指派';
             }
-        })->sortable();
-        $grid->column('quantity', __('數量'))->sortable();
-        $grid->column('scrap', __('報廢'))->sortable();
-        $grid->column('start_time', __('開始時間'))->display(function($start_time){
+        });
+        $grid->column('quantity', __('<a href="#">數量▼</a>'));
+        $grid->column('scrap', __('<a href="#">報廢▼</a>'));
+        $grid->column('start_time', __('<a href="#">開始時間▼</a>'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
                 return '--';
             }
@@ -97,8 +98,8 @@ class BatchesController extends AdminController
             {
                 return $start_time;
             }
-        })->sortable();
-        $grid->column('end_time', __('結束時間'))->display(function($start_time){
+        });
+        $grid->column('end_time', __('<a href="#">結束時間▼</a>'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
                 return '--';
             }
@@ -106,11 +107,11 @@ class BatchesController extends AdminController
             {
                 return $start_time;
             }
-        })->sortable();
-        $grid->column('run_second', __('總時間'))->display(function($time){
+        });
+        $grid->column('run_second', __('<a href="#">總時間▼</a>'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        })->sortable();
-        $grid->column('id', __('總休息時間'))->display(function($id){
+        });
+        $grid->column('id', __('<a href="#">總休息時間▼</a>'))->display(function($id){
             try {
 
                 $startrecords = BatchStateRecord::where('batch_id', $id)
@@ -128,9 +129,9 @@ class BatchesController extends AdminController
             } catch (\Throwable $th) {
                 return "--";
             }
-        })->sortable();
+        });
         
-        $grid->column('RealTime', __('實際時間'))->display(function($Records){
+        $grid->column('RealTime', __('<a href="#">實際時間▼</a>'))->display(function($Records){
             try {
                 $batch_id = $Records[0]['batch_id'];
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;
@@ -151,9 +152,9 @@ class BatchesController extends AdminController
                 return "--";
             }
             
-        })->sortable();
+        });
 
-        $grid->column('PiceTime', __('單位工時'))->display(function($Records){
+        $grid->column('PiceTime', __('<a href="#">單位工時▼</a>'))->display(function($Records){
             try {
                 $batch_id = $Records[0]['batch_id'];
                 $pice = Batches::where('id', $batch_id)->first()->quantity;
@@ -175,13 +176,13 @@ class BatchesController extends AdminController
                 return "--";
             }
             
-        })->sortable();
+        });
 
-        $grid->column('ProdProcessesList.process_time', __('標準工時'))->display(function($process_time){
+        $grid->column('ProdProcessesList.process_time', __('<a href="#">標準工時▼</a>'))->display(function($process_time){
             return $process_time.'秒';
-        })->sortable();
+        });
 
-        $grid->column('DiffTime', __('超前工時'))->display(function($Records){
+        $grid->column('DiffTime', __('<a href="#">超前工時▼</a>'))->display(function($Records){
             try {
                 $batch_id = $Records[0]['batch_id'];
                 $ppId = Batches::where('id', $batch_id)->first()->prod_processes_list_id;
@@ -205,9 +206,9 @@ class BatchesController extends AdminController
                 return "--";
             }
             
-        })->sortable();
+        });
 
-        $grid->column('area', __('負責區域/部門'))->display(function($area){
+        $grid->column('area', __('<a href="#">負責區域/部門▼</a>'))->display(function($area){
             if ($area == NULL) {
                 return '--';
             }
@@ -216,8 +217,8 @@ class BatchesController extends AdminController
                 return $area;
             }
             
-        })->sortable();
-        $grid->column('state', __('狀態'))->display(function($state){
+        });
+        $grid->column('state', __('<a href="#">狀態▼</a>'))->display(function($state){
             $stateArr = [
                 'pending'  => '確認中', 
                 'approve'   => '等待加工',
@@ -230,9 +231,15 @@ class BatchesController extends AdminController
             ];
             return '<span class="badge badge-warning" style="background:blue">'.$stateArr[$state].'</span>';
             // return $stateArr[$state];
-        })->sortable();
+        });
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

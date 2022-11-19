@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Admin;
 
 class StepsController extends AdminController
 {
@@ -27,16 +28,22 @@ class StepsController extends AdminController
     {
         $grid = new Grid(new Steps());
 
-        $grid->column('id', __('Id'))->sortable();
-        $grid->column('Tools.name', __('機台名稱'))->sortable();
+        $grid->column('id', __('<a href="#">Id▼</a>'));
+        $grid->column('Tools.name', __('<a href="#">機台名稱▼</a>'));
         // $grid->column('tool_id', __('Tool id'));
-        $grid->column('name', __('步驟名稱'))->sortable();
-        $grid->column('max_slot', __('最大量'))->sortable();
-        $grid->column('min_slot', __('最小量'))->sortable();
-        $grid->column('step_time', __('秒數'))->sortable();
-        $grid->column('note', __('備註'))->sortable();
+        $grid->column('name', __('<a href="#">步驟名稱▼</a>'));
+        $grid->column('max_slot', __('<a href="#">最大量▼</a>'));
+        $grid->column('min_slot', __('<a href="#">最小量▼</a>'));
+        $grid->column('step_time', __('<a href="#">秒數▼</a>'));
+        $grid->column('note', __('<a href="#">備註▼</a>'));
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

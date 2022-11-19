@@ -7,6 +7,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Admin;
 
 class VendorsController extends AdminController
 {
@@ -26,16 +27,22 @@ class VendorsController extends AdminController
     {
         $grid = new Grid(new Vendors());
 
-        $grid->column('id', __('Id'))->sortable();
-        $grid->column('company_name', __('公司'))->sortable();
-        $grid->column('contact_name', __('客戶名'))->sortable();
-        $grid->column('phone', __('市話'))->sortable();
-        $grid->column('mobile', __('手機'))->sortable();
-        $grid->column('gui_number', __('統編'))->sortable();
-        $grid->column('address', __('地址'))->sortable();
-        $grid->column('note', __('備註'))->sortable();
-        $grid->column('created_at', __('建立時間'))->sortable();
+        $grid->column('id', __('<a href="#">Id▼</a>'));
+        $grid->column('company_name', __('<a href="#">公司▼</a>'));
+        $grid->column('contact_name', __('<a href="#">客戶名▼</a>'));
+        $grid->column('phone', __('<a href="#">市話▼</a>'));
+        $grid->column('mobile', __('<a href="#">手機▼</a>'));
+        $grid->column('gui_number', __('<a href="#">統編▼</a>'));
+        $grid->column('address', __('<a href="#">地址▼</a>'));
+        $grid->column('note', __('<a href="#">備註▼</a>'));
+        $grid->column('created_at', __('<a href="#">建立時間▼</a>'));
         // $grid->column('updated_at', __('Updated at'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

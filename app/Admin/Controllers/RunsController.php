@@ -33,24 +33,24 @@ class RunsController extends AdminController
     {
         $grid = new Grid(new Runs());
 
-        $grid->column('id', __('Id'))->sortable();
-        $grid->column('run_code', __('工單ID'))->sortable();
-        $grid->column('Maker.name', __('建立者'))->sortable();
-        $grid->column('Products.product_code', __('產品'))->sortable();
-        $grid->column('quantity', __('總數量'))->sortable();
-        $grid->column('each_quantity', __('分批'))->sortable();
-        $grid->column('start_time', __('開始時間'))->sortable();
-        $grid->column('end_time', __('結束時間'))->sortable();
-        $grid->column('predict_second', __('預估執行秒數'))->display(function($time){
+        $grid->column('id', __('<a href="#">Id▼</a>'));
+        $grid->column('run_code', __('<a href="#">工單ID▼</a>'));
+        $grid->column('Maker.name', __('<a href="#">建立者▼</a>'));
+        $grid->column('Products.product_code', __('<a href="#">產品▼</a>'));
+        $grid->column('quantity', __('<a href="#">總數量▼</a>'));
+        $grid->column('each_quantity', __('<a href="#">分批▼</a>'));
+        $grid->column('start_time', __('<a href="#">開始時間▼</a>'));
+        $grid->column('end_time', __('<a href="#">結束時間▼</a>'));
+        $grid->column('predict_second', __('<a href="#">預估執行秒數'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        })->sortable();
-        $grid->column('run_second', __('實際執行秒數'))->display(function($time){
+        });
+        $grid->column('run_second', __('<a href="#">實際執行秒數▼</a>'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        })->sortable();
-        $grid->column('qtime', __('限制秒數(QTime)'))->display(function($time){
+        });
+        $grid->column('qtime', __('<a href="#">限制秒數(QTime)▼</a>'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        })->sortable();
-        $grid->column('state', __('狀態'))->display(function($state){
+        });
+        $grid->column('state', __('<a href="#">狀態▼</a>'))->display(function($state){
             $stateArr = [
                 'pending'  => '確認中', 
                 'approve'   => '等待加工',
@@ -61,9 +61,15 @@ class RunsController extends AdminController
                 'cancel'    => '取消',
             ];
             return '<span class="badge badge-warning" style="background:red">'.$stateArr[$state].'</span>';
-        })->sortable();
+        });
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

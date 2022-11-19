@@ -9,6 +9,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Admin;
 
 class ProdProcessesListController extends AdminController
 {
@@ -28,18 +29,24 @@ class ProdProcessesListController extends AdminController
     {
         $grid = new Grid(new ProdProcessesList());
 
-        $grid->column('id', __('Id'))->sortable();
-        $grid->column('Products.product_code', __('產品代碼'))->sortable();
-        $grid->column('Processes.process_code', __('製程代碼'))->sortable();
-        $grid->column('order', __('排序'))->sortable();
-        $grid->column('process_time', __('執行秒數'))->sortable();
-        $grid->column('min_slot', __('最少執行數量'))->sortable();
-        $grid->column('max_slot', __('最多執行數量'))->sortable();
-        $grid->column('state', __('狀態'))->display(function($state){
+        $grid->column('id', __('<a href="#">Id▼</a>'));
+        $grid->column('Products.product_code', __('<a href="#">產品代碼▼</a>'));
+        $grid->column('Processes.process_code', __('<a href="#">製程代碼▼</a>'));
+        $grid->column('order', __('<a href="#">排序▼</a>'));
+        $grid->column('process_time', __('<a href="#">執行秒數▼</a>'));
+        $grid->column('min_slot', __('<a href="#">最少執行數量▼</a>'));
+        $grid->column('max_slot', __('<a href="#">最多執行數量▼</a>'));
+        $grid->column('state', __('<a href="#">狀態▼</a>'))->display(function($state){
             return $state==1?'啟用':'停用';
-        })->sortable();
+        });
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

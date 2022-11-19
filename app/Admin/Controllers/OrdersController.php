@@ -11,6 +11,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
+use Encore\Admin\Admin;
 
 class OrdersController extends AdminController
 {
@@ -38,7 +39,7 @@ class OrdersController extends AdminController
             }, '訂單號');
         });
         
-        $grid->column('id', __('訂單'))->expand(function ($model) {
+        $grid->column('id', __('<a href="#">訂單▼</a>'))->expand(function ($model) {
             $runs = $model->Runs()->get()->map(function ($run) {
                 $product = Products::where('id', $run->product_id)->first();
                 $run['product_id'] = $product->product_name;
@@ -46,15 +47,21 @@ class OrdersController extends AdminController
             });
                         
             return new Table(['商品','數量', '每箱數量','開始時間', '結束時間'], $runs->toArray());
-        })->sortable();
-        $grid->column('order_code', __('訂單號'))->sortable();
-        $grid->column('customer_id', __('廠商'))->display(function($customer_id){
+        });
+        $grid->column('order_code', __('<a href="#">訂單號▼</a>'));
+        $grid->column('customer_id', __('<a href="#">廠商▼</a>'))->display(function($customer_id){
             $customer = Customers::where('id', $customer_id)->first();
             return $customer->company_name;
-        })->sortable();
-        $grid->column('status', __('狀態'))->sortable();
-        $grid->column('created_at', __('建立時間'))->sortable();
+        });
+        $grid->column('status', __('<a href="#">狀態▼</a>'));
+        $grid->column('created_at', __('<a href="#">建立時間▼</a>'));
         // $grid->column('updated_at', __('Updated at'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

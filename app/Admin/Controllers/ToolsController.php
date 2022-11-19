@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Admin;
 
 class ToolsController extends AdminController
 {
@@ -27,14 +28,20 @@ class ToolsController extends AdminController
     {
         $grid = new Grid(new Tools());
 
-        $grid->column('id', __('Id'))->sortable();
-        $grid->column('Vendors.company_name', __('供應商'))->sortable();
+        $grid->column('id', __('<a href="#">Id▼</a>'));
+        $grid->column('Vendors.company_name', __('<a href="#">供應商▼</a>'));
         // $grid->column('vendor_id', __('Vendor id'));
-        $grid->column('name', __('機台名稱'))->sortable();
-        $grid->column('area', __('位置'))->sortable();
-        $grid->column('note', __('備註'))->sortable();
+        $grid->column('name', __('<a href="#">機台名稱▼</a>'));
+        $grid->column('area', __('<a href="#">位置▼</a>'));
+        $grid->column('note', __('<a href="#">備註▼</a>'));
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
+
+        Admin::html('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.0.10/js/jquery.tablesorter.min.js" integrity="sha512-r8Bn3mRanym3q+4Xvnmt3Wjp8LzovdGYgEksa0NuUzg6D8wKkRM7riZzHZs31yJcGb1NeBZ0aEE6HEsScACstw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+            $(".grid-table").tablesorter();
+        </script>
+        ');
 
         return $grid;
     }

@@ -199,7 +199,6 @@
                                                 
                                                 try {
                                                     for ($i=0; $i < sizeof($startrecords); $i++) { 
-
                                                         try{
                                                             $start_id = $startrecords[$i]->id;
                                                             $start = $startrecords[$i]->created_at;

@@ -27,16 +27,16 @@ class StaffsController extends AdminController
         $grid = new Grid(new Staffs());
 
         // $grid->column('id', __('Id'));
-        $grid->column('employee_id', __('工號'));
-        $grid->column('name', __('姓名'));
-        $grid->column('department', __('部門'));
-        $grid->column('job_title', __('職稱'));
-        $grid->column('gender', __('姓名'));
+        $grid->column('employee_id', __('工號'))->sortable();
+        $grid->column('name', __('姓名'))->sortable();
+        $grid->column('department', __('部門'))->sortable();
+        $grid->column('job_title', __('職稱'))->sortable();
+        $grid->column('gender', __('姓名'))->sortable();
         $grid->column('state', __('狀態'))->display(function($state){
             return $state==1 ? '通過':'未通過';
-        });
-        $grid->column('note', __('備註'));
-        $grid->column('created_at', __('建立時間'));
+        })->sortable();
+        $grid->column('note', __('備註'))->sortable();
+        $grid->column('created_at', __('建立時間'))->sortable();
         // $grid->column('updated_at', __('Updated at'));
 
         return $grid;

@@ -26,11 +26,11 @@ class ModelsController extends AdminController
     {
         $grid = new Grid(new Models());
 
-        $grid->column('id', __('Id'));
-        $grid->column('model_code', __('規格代碼'));
-        $grid->column('model_name', __('規格名稱'));
-        $grid->column('spec', __('SPEC'));
-        $grid->column('note', __('備註'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('model_code', __('規格代碼'))->sortable();
+        $grid->column('model_name', __('規格名稱'))->sortable();
+        $grid->column('spec', __('SPEC'))->sortable();
+        $grid->column('note', __('備註'))->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

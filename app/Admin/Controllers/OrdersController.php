@@ -46,14 +46,14 @@ class OrdersController extends AdminController
             });
                         
             return new Table(['商品','數量', '每箱數量','開始時間', '結束時間'], $runs->toArray());
-        });
-        $grid->column('order_code', __('訂單號'));
+        })->sortable();
+        $grid->column('order_code', __('訂單號'))->sortable();
         $grid->column('customer_id', __('廠商'))->display(function($customer_id){
             $customer = Customers::where('id', $customer_id)->first();
             return $customer->company_name;
-        });
-        $grid->column('status', __('狀態'));
-        $grid->column('created_at', __('建立時間'));
+        })->sortable();
+        $grid->column('status', __('狀態'))->sortable();
+        $grid->column('created_at', __('建立時間'))->sortable();
         // $grid->column('updated_at', __('Updated at'));
 
         return $grid;

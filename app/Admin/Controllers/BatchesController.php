@@ -68,9 +68,9 @@ class BatchesController extends AdminController
             }
             
             return new Table(['開始','結束', '原因','總工時'], $record);
-        });
-        $grid->column('run_id', __('工單'));
-        $grid->column('ProdProcessesList.order', __('製程順序'))->width(50);
+        })->sortable();
+        $grid->column('run_id', __('工單'))->sortable();
+        $grid->column('ProdProcessesList.order', __('製程順序'))->sortable();
         $grid->column('ProdProcessesList.id', __('製程與產品'))->display(function($id){
             $prodProcessesList = ProdProcessesList::where('id', $id)->first();
             $processId = $prodProcessesList->process_id;
@@ -78,7 +78,7 @@ class BatchesController extends AdminController
             $processesName = Processes::where('id', $processId)->first()->name;
             $productsName = Products::where('id', $productId)->first()->product_code;
             return $processesName.'-'.$productsName;
-        })->width(100);
+        })->sortable();
         $grid->column('doer_id', __('員工'))->display(function($id){
             if ($id != NULL) {
                 $staff = User::where('id', $id)->first();
@@ -86,9 +86,9 @@ class BatchesController extends AdminController
             } else {
                 return '尚未指派';
             }
-        });
-        $grid->column('quantity', __('數量'));
-        $grid->column('scrap', __('報廢'));
+        })->sortable();
+        $grid->column('quantity', __('數量'))->sortable();
+        $grid->column('scrap', __('報廢'))->sortable();
         $grid->column('start_time', __('開始時間'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
                 return '--';
@@ -97,7 +97,7 @@ class BatchesController extends AdminController
             {
                 return $start_time;
             }
-        })->width(100);
+        })->sortable();
         $grid->column('end_time', __('結束時間'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
                 return '--';
@@ -106,10 +106,10 @@ class BatchesController extends AdminController
             {
                 return $start_time;
             }
-        })->width(100);
+        })->sortable();
         $grid->column('run_second', __('總時間'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        })->width(100);
+        })->sortable();
         $grid->column('id', __('總休息時間'))->display(function($id){
             try {
 
@@ -128,7 +128,7 @@ class BatchesController extends AdminController
             } catch (\Throwable $th) {
                 return "--";
             }
-        })->width(100);
+        })->sortable();
         
         $grid->column('RealTime', __('實際時間'))->display(function($Records){
             try {
@@ -151,7 +151,7 @@ class BatchesController extends AdminController
                 return "--";
             }
             
-        })->width(100);
+        })->sortable();
 
         $grid->column('PiceTime', __('單位工時'))->display(function($Records){
             try {
@@ -175,11 +175,11 @@ class BatchesController extends AdminController
                 return "--";
             }
             
-        })->width(100);
+        })->sortable();
 
         $grid->column('ProdProcessesList.process_time', __('標準工時'))->display(function($process_time){
             return $process_time.'秒';
-        })->width(100);
+        })->sortable();
 
         $grid->column('DiffTime', __('超前工時'))->display(function($Records){
             try {
@@ -205,7 +205,7 @@ class BatchesController extends AdminController
                 return "--";
             }
             
-        })->width(100);
+        })->sortable();
 
         $grid->column('area', __('負責區域/部門'))->display(function($area){
             if ($area == NULL) {
@@ -216,7 +216,7 @@ class BatchesController extends AdminController
                 return $area;
             }
             
-        });
+        })->sortable();
         $grid->column('state', __('狀態'))->display(function($state){
             $stateArr = [
                 'pending'  => '確認中', 
@@ -230,7 +230,7 @@ class BatchesController extends AdminController
             ];
             return '<span class="badge badge-warning" style="background:blue">'.$stateArr[$state].'</span>';
             // return $stateArr[$state];
-        });
+        })->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

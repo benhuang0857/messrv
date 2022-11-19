@@ -26,15 +26,15 @@ class VendorsController extends AdminController
     {
         $grid = new Grid(new Vendors());
 
-        $grid->column('id', __('Id'));
-        $grid->column('company_name', __('公司'));
-        $grid->column('contact_name', __('客戶名'));
-        $grid->column('phone', __('市話'));
-        $grid->column('mobile', __('手機'));
-        $grid->column('gui_number', __('統編'));
-        $grid->column('address', __('地址'));
-        $grid->column('note', __('備註'));
-        $grid->column('created_at', __('建立時間'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('company_name', __('公司'))->sortable();
+        $grid->column('contact_name', __('客戶名'))->sortable();
+        $grid->column('phone', __('市話'))->sortable();
+        $grid->column('mobile', __('手機'))->sortable();
+        $grid->column('gui_number', __('統編'))->sortable();
+        $grid->column('address', __('地址'))->sortable();
+        $grid->column('note', __('備註'))->sortable();
+        $grid->column('created_at', __('建立時間'))->sortable();
         // $grid->column('updated_at', __('Updated at'));
 
         return $grid;

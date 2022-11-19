@@ -33,23 +33,23 @@ class RunsController extends AdminController
     {
         $grid = new Grid(new Runs());
 
-        $grid->column('id', __('Id'));
-        $grid->column('run_code', __('工單ID'));
-        $grid->column('Maker.name', __('建立者'));
-        $grid->column('Products.product_code', __('產品'));
-        $grid->column('quantity', __('總數量'));
-        $grid->column('each_quantity', __('分批'));
-        $grid->column('start_time', __('開始時間'));
-        $grid->column('end_time', __('結束時間'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('run_code', __('工單ID'))->sortable();
+        $grid->column('Maker.name', __('建立者'))->sortable();
+        $grid->column('Products.product_code', __('產品'))->sortable();
+        $grid->column('quantity', __('總數量'))->sortable();
+        $grid->column('each_quantity', __('分批'))->sortable();
+        $grid->column('start_time', __('開始時間'))->sortable();
+        $grid->column('end_time', __('結束時間'))->sortable();
         $grid->column('predict_second', __('預估執行秒數'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        });
+        })->sortable();
         $grid->column('run_second', __('實際執行秒數'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        });
+        })->sortable();
         $grid->column('qtime', __('限制秒數(QTime)'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
-        });
+        })->sortable();
         $grid->column('state', __('狀態'))->display(function($state){
             $stateArr = [
                 'pending'  => '確認中', 
@@ -61,7 +61,7 @@ class RunsController extends AdminController
                 'cancel'    => '取消',
             ];
             return '<span class="badge badge-warning" style="background:red">'.$stateArr[$state].'</span>';
-        });
+        })->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

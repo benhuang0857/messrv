@@ -56,7 +56,11 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" 
-                                            href="#collapse{{$batch->id}}">加工編號：{{$batch->run_id}} 箱號：{{$batch->batch_code}} 加工：{{$batch->ProdProcessesList->Processes->process_code}} 產品: {{$batch->ProdProcessesList->Products->product_name}}
+                                            href="#collapse{{$batch->id}}">
+                                            加工編號：{{$batch->run_id}} 
+                                            箱號：{{$batch->batch_code}} 
+                                            加工：{{$batch->ProdProcessesList->Processes->process_code}} 
+                                            產品: {{$batch->ProdProcessesList->Products->product_name}}
                                             <span class="badge badge-secondary" style="background:<?php echo $Data['Color'][$batch->state]?>">{{$Data['States'][$batch->state]}}</span>
                                             </a>
                                         </h4>
@@ -125,7 +129,7 @@
                                                 <input type="number" name="scrap" class="form-control" value="{{$batch->scrap}}" >
                                             </div>
 
-                                            <div class="form-group">
+                                            <div class="form-group" style="display:none">
                                                 <label for="hold_reason">暫停原因</label>
                                                 <select class="form-control" name="hold_reason">
                                                     <option value="None">無</option>
@@ -197,9 +201,11 @@
                                                     for ($i=0; $i < sizeof($startrecords); $i++) { 
 
                                                         try{
+                                                            $start_id = $startrecords[$i]->id;
                                                             $start = $startrecords[$i]->created_at;
                                                             $end = $eedrecords[$i]->created_at;
                                                             array_push($record, [
+                                                                'id' => $start_id,
                                                                 'start' => $start,
                                                                 'end' => $end,
                                                                 'note' => $startrecords[$i]->note,
@@ -207,8 +213,10 @@
                                                             ]);
                                                         }
                                                         catch (\Throwable $th) {
+                                                            $start_id = $startrecords[$i]->id;
                                                             $start = $startrecords[$i]->created_at;
                                                             array_push($record, [
+                                                                'id' => $start_id,
                                                                 'start' => $start,
                                                                 'end' => '--',
                                                                 'note' => $startrecords[$i]->note,
@@ -225,7 +233,20 @@
                                                     <tr>
                                                         <th>{{$case['start']}}</th>
                                                         <th>{{$case['end']}}</th>
-                                                        <th>{{$case['note']}}</th>
+                                                        <th>
+                                                        <form>
+                                                            <div class="form-group">
+                                                                <input type="text" name="records_id" class="form-control" value="{{$case['id']}}" style="display:none">
+                                                                <select class="form-control" name="change_hold_reason" onchange="changeReason(this)">
+                                                                    <option value="None" <?php if($case['note']=='None') echo 'selected';?> >無</option>
+                                                                    <option value="機台PM" <?php if($case['note']=='機台PM') echo 'selected';?> >機台PM</option>
+                                                                    <option value="機台異常" <?php if($case['note']=='機台異常') echo 'selected';?> >機台異常</option>
+                                                                    <option value="用餐" <?php if($case['note']=='用餐') echo 'selected';?> >用餐</option>
+                                                                    <option value="休息" <?php if($case['note']=='休息') echo 'selected';?> >休息</option>
+                                                                </select>
+                                                            </div>
+                                                        </form>
+                                                        </th>
                                                     </tr>
                                                 @endforeach
                                                 </tbody>
@@ -308,7 +329,7 @@
                                                     <input type="number" name="scrap" class="form-control" value="{{$batch->scrap}}" >
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="form-group" style="display:none">
                                                     <label for="hold_reason">暫停原因</label>
                                                     <select class="form-control" name="hold_reason">
                                                         <option value="None">無</option>
@@ -319,45 +340,44 @@
                                                     </select>
                                                 </div>                                        
                                                 <?php
-                                                
-                                                $buttonHtm = '
-                                                <a type="submit" class="btn btn-primary" onclick="process(this)">執行</a>
-                                                <a type="submit" class="btn btn-danger" disabled>開始暫停</a>
-                                                <a type="submit" class="btn btn-danger" disabled>結束暫停</a>
-                                                <a type="submit" class="btn btn-success" onclick="complete(this)">完成</a>
-                                                ';
-                                                if ($batch->state == 'starthold') {
                                                     $buttonHtm = '
-                                                    <a type="submit" class="btn btn-primary" disabled>執行</a>
-                                                    <a type="submit" class="btn btn-danger" disabled>開始暫停</a>
-                                                    <a type="submit" class="btn btn-danger" onclick="endhold(this)">結束暫停</a>
-                                                    <a type="submit" class="btn btn-success" disabled>完成</a>
+                                                    <a type="submit" class="btn btn-primary btn-lg" onclick="process(this)">執行</a>
+                                                    <a type="submit" class="btn btn-danger btn-lg" disabled>開始暫停</a>
+                                                    <a type="submit" class="btn btn-danger btn-lg" disabled>結束暫停</a>
+                                                    <a type="submit" class="btn btn-success btn-lg" onclick="complete(this)">完成</a>
                                                     ';
-                                                }
-                                                else if($batch->state == 'endhold'){
-                                                    $buttonHtm = '
-                                                    <a type="submit" class="btn btn-primary" onclick="process(this)">執行</a>
-                                                    <a type="submit" class="btn btn-danger" onclick="starthold(this)">開始暫停</a>
-                                                    <a type="submit" class="btn btn-danger" disabled>結束暫停</a>
-                                                    <a type="submit" class="btn btn-success" onclick="complete(this)">完成</a>
-                                                    ';
-                                                }
-                                                else if($batch->state == 'process'){
-                                                    $buttonHtm = '
-                                                    <a type="submit" class="btn btn-primary" disabled>執行</a>
-                                                    <a type="submit" class="btn btn-danger" onclick="starthold(this)">開始暫停</a>
-                                                    <a type="submit" class="btn btn-danger" disabled>結束暫停</a>
-                                                    <a type="submit" class="btn btn-success" onclick="complete(this)">完成</a>
-                                                    ';
-                                                }
-                                                else if($batch->state == 'complete'){
-                                                    $buttonHtm = '
-                                                    <a type="submit" class="btn btn-primary" disabled>執行</a>
-                                                    <a type="submit" class="btn btn-danger" disabled>開始暫停</a>
-                                                    <a type="submit" class="btn btn-danger" disabled>結束暫停</a>
-                                                    <a type="submit" class="btn btn-success" disabled>完成</a>
-                                                    ';
-                                                }
+                                                    if ($batch->state == 'starthold') {
+                                                        $buttonHtm = '
+                                                        <a type="submit" class="btn btn-primary btn-lg" disabled>執行</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" disabled>開始暫停</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" onclick="endhold(this)">結束暫停</a>
+                                                        <a type="submit" class="btn btn-success btn-lg" disabled>完成</a>
+                                                        ';
+                                                    }
+                                                    else if($batch->state == 'endhold'){
+                                                        $buttonHtm = '
+                                                        <a type="submit" class="btn btn-primary btn-lg" onclick="process(this)">執行</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" onclick="starthold(this)">開始暫停</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" disabled>結束暫停</a>
+                                                        <a type="submit" class="btn btn-success btn-lg" onclick="complete(this)">完成</a>
+                                                        ';
+                                                    }
+                                                    else if($batch->state == 'process'){
+                                                        $buttonHtm = '
+                                                        <a type="submit" class="btn btn-primary btn-lg" disabled>執行</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" onclick="starthold(this)">開始暫停</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" disabled>結束暫停</a>
+                                                        <a type="submit" class="btn btn-success btn-lg" onclick="complete(this)">完成</a>
+                                                        ';
+                                                    }
+                                                    else if($batch->state == 'complete'){
+                                                        $buttonHtm = '
+                                                        <a type="submit" class="btn btn-primary btn-lg" disabled>執行</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" disabled>開始暫停</a>
+                                                        <a type="submit" class="btn btn-danger btn-lg" disabled>結束暫停</a>
+                                                        <a type="submit" class="btn btn-success btn-lg" disabled>完成</a>
+                                                        ';
+                                                    }
                                                 ?>
                                                 {!!$buttonHtm!!}
                                                 
@@ -380,9 +400,11 @@
                                                         for ($i=0; $i < sizeof($startrecords); $i++) { 
 
                                                             try{
+                                                                $start_id = $startrecords[$i]->id;
                                                                 $start = $startrecords[$i]->created_at;
                                                                 $end = $eedrecords[$i]->created_at;
                                                                 array_push($record, [
+                                                                    'id' => $start_id,
                                                                     'start' => $start,
                                                                     'end' => $end,
                                                                     'note' => $startrecords[$i]->note,
@@ -390,8 +412,10 @@
                                                                 ]);
                                                             }
                                                             catch (\Throwable $th) {
+                                                                $start_id = $startrecords[$i]->id;
                                                                 $start = $startrecords[$i]->created_at;
                                                                 array_push($record, [
+                                                                    'id' => $start_id,
                                                                     'start' => $start,
                                                                     'end' => '--',
                                                                     'note' => $startrecords[$i]->note,
@@ -408,7 +432,20 @@
                                                         <tr>
                                                             <th>{{$case['start']}}</th>
                                                             <th>{{$case['end']}}</th>
-                                                            <th>{{$case['note']}}</th>
+                                                            <th>
+                                                            <form>
+                                                                <div class="form-group">
+                                                                    <input type="text" name="records_id" class="form-control" value="{{$case['id']}}" style="display:none">
+                                                                    <select class="form-control" name="change_hold_reason" onchange="changeReason(this)">
+                                                                        <option value="None" <?php if($case['note']=='None') echo 'selected';?> >無</option>
+                                                                        <option value="機台PM" <?php if($case['note']=='機台PM') echo 'selected';?> >機台PM</option>
+                                                                        <option value="機台異常" <?php if($case['note']=='機台異常') echo 'selected';?> >機台異常</option>
+                                                                        <option value="用餐" <?php if($case['note']=='用餐') echo 'selected';?> >用餐</option>
+                                                                        <option value="休息" <?php if($case['note']=='休息') echo 'selected';?> >休息</option>
+                                                                    </select>
+                                                                </div>
+                                                            </form>
+                                                            </th>
                                                         </tr>
                                                     @endforeach
                                                     </tbody>
@@ -552,6 +589,27 @@
             success: function (response) {
                 alert('完成');
                 location.reload();
+            },
+            error: function (thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
+
+    function changeReason(event)
+    {
+        var records_id = $(event).closest('form').find('input[name="records_id"]').val();
+        var change_hold_reason = $(event).closest('form').find('select[name="change_hold_reason"]').val();
+        $.ajax({
+            type: "GET",
+            url: "/ajax/change_hold_reason",
+            dataType: "json",
+            data:{
+                records_id: records_id,
+                change_hold_reason: change_hold_reason,
+            },
+            success: function (response) {
+                console.log(response);
             },
             error: function (thrownError) {
                 console.log(thrownError);

@@ -27,12 +27,12 @@ class ToolsController extends AdminController
     {
         $grid = new Grid(new Tools());
 
-        $grid->column('id', __('Id'));
-        $grid->column('Vendors.company_name', __('供應商'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('Vendors.company_name', __('供應商'))->sortable();
         // $grid->column('vendor_id', __('Vendor id'));
-        $grid->column('name', __('機台名稱'));
-        $grid->column('area', __('位置'));
-        $grid->column('note', __('備註'));
+        $grid->column('name', __('機台名稱'))->sortable();
+        $grid->column('area', __('位置'))->sortable();
+        $grid->column('note', __('備註'))->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

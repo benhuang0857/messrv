@@ -28,16 +28,16 @@ class ProdProcessesListController extends AdminController
     {
         $grid = new Grid(new ProdProcessesList());
 
-        $grid->column('id', __('Id'));
-        $grid->column('Products.product_code', __('產品代碼'));
-        $grid->column('Processes.process_code', __('製程代碼'));
-        $grid->column('order', __('排序'));
-        $grid->column('process_time', __('執行秒數'));
-        $grid->column('min_slot', __('最少執行數量'));
-        $grid->column('max_slot', __('最多執行數量'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('Products.product_code', __('產品代碼'))->sortable();
+        $grid->column('Processes.process_code', __('製程代碼'))->sortable();
+        $grid->column('order', __('排序'))->sortable();
+        $grid->column('process_time', __('執行秒數'))->sortable();
+        $grid->column('min_slot', __('最少執行數量'))->sortable();
+        $grid->column('max_slot', __('最多執行數量'))->sortable();
         $grid->column('state', __('狀態'))->display(function($state){
             return $state==1?'啟用':'停用';
-        });
+        })->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

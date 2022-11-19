@@ -27,12 +27,12 @@ class ProductsController extends AdminController
     {
         $grid = new Grid(new Products());
 
-        $grid->column('id', __('Id'));
-        $grid->column('Models.model_code', __('規格代碼'));
-        $grid->column('product_code', __('產品代碼'));
-        $grid->column('product_name', __('產品名稱'));
-        $grid->column('pic_path', __('產品圖片'));
-        $grid->column('note', __('備註'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('Models.model_code', __('規格代碼'))->sortable();
+        $grid->column('product_code', __('產品代碼'))->sortable();
+        $grid->column('product_name', __('產品名稱'))->sortable();
+        $grid->column('pic_path', __('產品圖片'))->sortable();
+        $grid->column('note', __('備註'))->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

@@ -22,6 +22,8 @@ Route::get('/ajax/process_starthold', 'AjaxController@StartProcessHold');
 Route::get('/ajax/process_endhold', 'AjaxController@EndProcessHold');
 Route::get('/ajax/process_complete', 'AjaxController@ProcessComplete');
 
+Route::get('/ajax/change_hold_reason', 'AjaxController@ChangeHoldReason');
+
 Route::get('/line', 'LoginController@pageLine');
 Route::get('/callback/login', 'LoginController@lineLoginCallBack');
 

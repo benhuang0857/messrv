@@ -35,7 +35,7 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        });
+        })->sortable();
         $grid->column('employee_id', __('工號'))->display(function($value){
             if ($value != NULL) {
                 return $value;
@@ -44,7 +44,7 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        });
+        })->sortable();
         $grid->column('email', __('Email'))->display(function($value){
             if ($value != NULL) {
                 return $value;
@@ -53,8 +53,8 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        });
-        $grid->column('name', __('姓名'));
+        })->sortable();
+        $grid->column('name', __('姓名'))->sortable();
         $grid->column('department', __('部門'))->display(function($value){
             if ($value != NULL) {
                 return $value;
@@ -63,8 +63,8 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        });
-        $grid->column('job_title', __('職稱'));
+        })->sortable();
+        $grid->column('job_title', __('職稱'))->sortable();
         $grid->column('gender', __('姓名'))->display(function($value){
             if ($value != NULL) {
                 return $value;
@@ -73,10 +73,10 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        });
+        })->sortable();
         $grid->column('state', __('狀態'))->display(function($state){
             return $state==1 ? '通過':'未通過';
-        });
+        })->sortable();
         $grid->column('note', __('備註'))->display(function($value){
             if ($value != NULL) {
                 return $value;
@@ -85,8 +85,8 @@ class UserController extends AdminController
             {
                 return '--';
             }
-        });
-        $grid->column('created_at', __('建立時間'));
+        })->sortable();
+        $grid->column('created_at', __('建立時間'))->sortable();
 
         return $grid;
     }

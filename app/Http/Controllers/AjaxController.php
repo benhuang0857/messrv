@@ -96,7 +96,6 @@ class AjaxController extends Controller
         return json_encode('EndHold');
     }
 
-
     public function ProcessComplete(Request $req)
     {
         $batch = Batches::where('id', $req->batchId)->first();
@@ -120,6 +119,15 @@ class AjaxController extends Controller
         $batch->run_second = $interval;
         $batch->state = "complete";
         $batch->save();
+
+        return json_encode('Complete');
+    }
+
+    public function ChangeHoldReason(Request $req)
+    {
+        $batchStateRecord = BatchStateRecord::where('id', $req->records_id)->first();
+        $batchStateRecord->note = $req->change_hold_reason;
+        $batchStateRecord->save();
 
         return json_encode('Complete');
     }

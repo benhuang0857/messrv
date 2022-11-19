@@ -27,14 +27,14 @@ class StepsController extends AdminController
     {
         $grid = new Grid(new Steps());
 
-        $grid->column('id', __('Id'));
-        $grid->column('Tools.name', __('機台名稱'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('Tools.name', __('機台名稱'))->sortable();
         // $grid->column('tool_id', __('Tool id'));
-        $grid->column('name', __('步驟名稱'));
-        $grid->column('max_slot', __('最大量'));
-        $grid->column('min_slot', __('最小量'));
-        $grid->column('step_time', __('秒數'));
-        $grid->column('note', __('備註'));
+        $grid->column('name', __('步驟名稱'))->sortable();
+        $grid->column('max_slot', __('最大量'))->sortable();
+        $grid->column('min_slot', __('最小量'))->sortable();
+        $grid->column('step_time', __('秒數'))->sortable();
+        $grid->column('note', __('備註'))->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

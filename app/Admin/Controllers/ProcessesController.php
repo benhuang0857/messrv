@@ -26,11 +26,11 @@ class ProcessesController extends AdminController
     {
         $grid = new Grid(new Processes());
 
-        $grid->column('id', __('Id'));
-        $grid->column('process_code', __('製程代碼'));
-        $grid->column('name', __('製程名稱'));
-        $grid->column('process_time', __('製程秒數'));
-        $grid->column('note', __('備註'));
+        $grid->column('id', __('Id'))->sortable();
+        $grid->column('process_code', __('製程代碼'))->sortable();
+        $grid->column('name', __('製程名稱'))->sortable();
+        $grid->column('process_time', __('製程秒數'))->sortable();
+        $grid->column('note', __('備註'))->sortable();
         // $grid->column('created_at', __('Created at'));
         // $grid->column('updated_at', __('Updated at'));
 

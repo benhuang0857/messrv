@@ -54,4 +54,9 @@ class LoginController extends Controller
             Log::error($ex);
         }
     }
+
+    public function loginApi(Request $request)
+    {
+        return User::where('email', $request->email)->first();
+    }
 }

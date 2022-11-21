@@ -57,6 +57,6 @@ class LoginController extends Controller
 
     public function loginApi(Request $request)
     {
-        return User::where('email', $request->email)->first();
+        return json_encode(User::where('email', $request->email)->first());
     }
 }

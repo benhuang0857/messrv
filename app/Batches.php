@@ -10,7 +10,7 @@ class Batches extends Model
 
     public function Runs()
     {
-        return $this->hasOne('App\Runs', 'id', 'run_id');
+        return $this->hasOne('App\Runs', 'run_code', 'run_id');
     }
 
     public function ProdProcessesList()
@@ -20,7 +20,7 @@ class Batches extends Model
 
     public function Doer()
     {
-        return $this->hasOne('App\Staffs', 'id', 'doer_id');
+        return $this->hasOne('App\User', 'id', 'doer_id');
     }
 
     public function Records()

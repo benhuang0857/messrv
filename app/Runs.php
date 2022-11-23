@@ -17,4 +17,9 @@ class Runs extends Model
     {
         return $this->hasOne('App\User', 'id', 'maker_id');
     }
+
+    public function Order()
+    {
+        return $this->hasOne('App\Orders', 'id', 'order_id');
+    }
 }

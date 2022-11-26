@@ -9,9 +9,9 @@
                 <div class="panel-heading">
                     {{-- <a href="?show=all"><span class="badge badge-primary" style="padding:10px">所有</span></a> --}}
                     <a href="?show=approve"><span class="badge badge-primary" style="padding:10px">等待加工({{count($Data['Batches'])}})</span></a>
-                    <a href="?show=process"><span class="badge badge-primary" style="padding:10px">進行中({{count($Data['JobProcessCount'])}})</span></a>
-                    <a href="?show=complete"><span class="badge badge-primary" style="padding:10px">完成({{count($Data['JobCmpleteCount'])}})</span></a>
-                    <a href="?show=starthold"><span class="badge badge-primary" style="padding:10px">暫停({{count($Data['JobHoldCount'])}})</span></a>
+                    <a href="?show=process"><span class="badge badge-primary" style="padding:10px">進行中({{$Data['JobProcessCount']}})</span></a>
+                    <a href="?show=complete"><span class="badge badge-primary" style="padding:10px">完成({{$Data['JobCmpleteCount']}})</span></a>
+                    <a href="?show=starthold"><span class="badge badge-primary" style="padding:10px">暫停({{$Data['JobHoldCount']}})</span></a>
                 </div>
                 <div class="panel-body">
                     @if (session('status'))

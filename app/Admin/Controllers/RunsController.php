@@ -180,8 +180,21 @@ class RunsController extends AdminController
                 $eachQuantity = intval($form->each_quantity);
                 $sumPPL = sizeof($ProdProcessesList); //Count of ProdProcessesList
 
+                // $batchNum = [];
+                // for ($i=0; $i < $sumPPL; $i++) { 
+                //     if (($sumQuantity - $eachQuantity) >= 0) {
+                //         $batchNum[$i] = $eachQuantity;
+                //         $sumQuantity -= $eachQuantity;
+                //     }
+                //     else
+                //     {
+                //         $batchNum[$i] = $sumQuantity;
+                //     }
+                // }
                 $batchNum = [];
-                for ($i=0; $i < $sumPPL; $i++) { 
+                $i = 0;
+                while($sumQuantity > 0)
+                {
                     if (($sumQuantity - $eachQuantity) >= 0) {
                         $batchNum[$i] = $eachQuantity;
                         $sumQuantity -= $eachQuantity;
@@ -190,6 +203,7 @@ class RunsController extends AdminController
                     {
                         $batchNum[$i] = $sumQuantity;
                     }
+                    $i++;
                 }
 
                 foreach ($ProdProcessesList as $key => $process) {
@@ -204,7 +218,7 @@ class RunsController extends AdminController
                         $batch->run_id = $form->run_code;
                         $batch->prod_processes_list_id = $process->id;
                         // $batch->doer_id = $form->maker_id;
-                        $batch->quantity = $batchNum[($i % $sumPPL)];
+                        $batch->quantity = $batchNum[$i];
                         $batch->start_time = '1000-01-01 00:00:00';
                         $batch->end_time = '1000-01-01 00:00:00';
                         $batch->run_second = 0;

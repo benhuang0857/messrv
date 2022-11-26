@@ -131,7 +131,7 @@ class RunsController extends AdminController
         }
 
         Admin::script('
-            $("select[name=product_id]").change(function(){
+            $("form :input").change(function(){
                 var productId = $("select[name=product_id]").val();
 
                 $.ajax({
@@ -141,7 +141,7 @@ class RunsController extends AdminController
                     data:{pid: productId},
                     success: function (response) {
                         var q = $("input[name=quantity]").val();
-                        $("input[name=predict_second]").val(response*1000);
+                        $("input[name=predict_second]").val(response*q);
                     },
                     error: function (thrownError) {
                         console.log(thrownError);

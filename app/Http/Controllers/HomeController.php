@@ -39,6 +39,10 @@ class HomeController extends Controller
                             ->get();
 
                             // dd($batches[0]->Runs);
+        $batchesNotComplete = Batches::where('doer_id', $uId)
+                            ->where('state', '<>', 'complete')
+                            ->get();
+        $jobCount = count($batchesNotComplete);
         
         $doers = User::where('department', $user->department)->get();
 
@@ -70,7 +74,8 @@ class HomeController extends Controller
             'States'=>$state,
             'Color'=>$color,
             'Tools'=>Tools::all(),
-            'Doers' => $doers
+            'Doers' => $doers,
+            'JobCount' => $jobCount
         ];
 
         return view('home')->with('Data', $data);

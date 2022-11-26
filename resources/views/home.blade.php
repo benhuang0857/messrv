@@ -579,6 +579,12 @@
 
         if(tool != 'Ng' || doer != 'Ng')
         {
+            var jobCount = <?php echo $Data['JobCount']?>;
+            alert(jobCount);
+            // if(jobCount > 0)
+            // {
+                
+            // }
             $.ajax({
                 type: "GET",
                 url: "/ajax/process_start",

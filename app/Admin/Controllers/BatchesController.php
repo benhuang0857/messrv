@@ -190,7 +190,7 @@ class BatchesController extends AdminController
         });
 
         $grid->column('ProdProcessesList.process_time', __('<a href="#">標準工時▼</a>'))->display(function($process_time){
-            return $process_time*$qty.'秒';
+            return $process_time*$this->qty.'秒';
         });
 
         $grid->column('DiffTime', __('<a href="#">超前工時▼</a>'))->display(function($Records){

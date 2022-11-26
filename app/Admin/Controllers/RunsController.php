@@ -149,7 +149,7 @@ class RunsController extends AdminController
                 });
             });
 
-            $(".btn").click(function(){
+            $(".input-group-btn").click(function(){
                 var productId = $("select[name=product_id]").val();
 
                 $.ajax({

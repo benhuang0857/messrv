@@ -580,7 +580,7 @@
         if(tool != 'Ng' || doer != 'Ng')
         {
             var jobCount = <?php echo $Data['JobCount']?>;
-            alert(jobCount);
+            
             if(jobCount == 0)
             {
                 $.ajax({
@@ -607,6 +607,10 @@
                         console.log(thrownError);
                     }
                 });
+            }
+            else
+            {
+                alert("尚有"+jobCount+"筆工作未完成，請先完成!");
             }
             
         }

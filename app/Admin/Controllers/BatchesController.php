@@ -138,25 +138,8 @@ class BatchesController extends AdminController
         });
         
         $grid->column('RealTime', __('<a href="#">實際時間▼</a>'))->display(function($Records){
-            
-                $batch_id = $this->bid;
-                $run_second = Batches::where('id', $batch_id)->first()->run_second;
-
-                $startrecords = BatchStateRecord::where('batch_id', $batch_id)
-                                                ->where('state', 'starthold')->get();
-                $eedrecords = BatchStateRecord::where('batch_id', $batch_id)
-                                                ->where('state', 'endhold')->get();
-                $restSec = 0;
-                for ($i=0; $i < sizeof($startrecords); $i++) { 
-                    $start = $startrecords[$i]->created_at;
-                    $end = $eedrecords[$i]->created_at;
-                    $restSec += $start->diffInSeconds($end);
-                }
-
-                return ($run_second - $restSec).'秒(約等於'.round((($run_second - $restSec)/60), 2).'分鐘)';
-            
             try {
-                $batch_id = $Records[0]['batch_id'];
+                $batch_id = $this->bid;
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;
 
                 $startrecords = BatchStateRecord::where('batch_id', $batch_id)
@@ -179,7 +162,7 @@ class BatchesController extends AdminController
 
         $grid->column('PiceTime', __('<a href="#">單位工時▼</a>'))->display(function($Records){
             try {
-                $batch_id = $Records[0]['batch_id'];
+                $batch_id = $this->bid;
                 $pice = Batches::where('id', $batch_id)->first()->quantity;
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;
 
@@ -207,7 +190,7 @@ class BatchesController extends AdminController
 
         $grid->column('DiffTime', __('<a href="#">超前工時▼</a>'))->display(function($Records){
             try {
-                $batch_id = $Records[0]['batch_id'];
+                $batch_id = $this->bid;
                 $ppId = Batches::where('id', $batch_id)->first()->prod_processes_list_id;
                 $process_time = ProdProcessesList::where('id', $ppId)->first()->process_time;
                 $pice = Batches::where('id', $batch_id)->first()->quantity;

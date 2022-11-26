@@ -111,7 +111,13 @@ class BatchesController extends AdminController
         $grid->column('run_second', __('<a href="#">總時間▼</a>'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
         });
+
+        $bid = null;
+
         $grid->column('id', __('<a href="#">總休息時間▼</a>'))->display(function($id){
+            
+            $bid = $id;
+            
             try {
 
                 $startrecords = BatchStateRecord::where('batch_id', $id)
@@ -133,7 +139,7 @@ class BatchesController extends AdminController
         
         $grid->column('RealTime', __('<a href="#">實際時間▼</a>'))->display(function($Records){
             
-                var_dump($Records);
+                var_dump($bid);
                 $batch_id = $Records[0]['batch_id'];
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;
 

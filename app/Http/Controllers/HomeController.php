@@ -39,7 +39,7 @@ class HomeController extends Controller
                             ->get();
 
         $batchesNotStart = Batches::where('area', $user->department)
-                            ->where('state', 'pending')
+                            ->where('state', 'approve')
                             ->get();
         $jobNotStartCount = count($batchesNotStart);
 

@@ -141,7 +141,7 @@ class RunsController extends AdminController
                     data:{pid: productId},
                     success: function (response) {
                         var q = $("input[name=quantity]").val();
-                        $("input[name=predict_second]").val(response*q);
+                        $("input[name=predict_second]").val(response*1000);
                     },
                     error: function (thrownError) {
                         console.log(thrownError);

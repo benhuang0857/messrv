@@ -204,7 +204,7 @@ class RunsController extends AdminController
                         $batch->run_id = $form->run_code;
                         $batch->prod_processes_list_id = $process->id;
                         // $batch->doer_id = $form->maker_id;
-                        $batch->quantity = $batchNum[$i];
+                        $batch->quantity = $batchNum[($i % $sumPPL)];
                         $batch->start_time = '1000-01-01 00:00:00';
                         $batch->end_time = '1000-01-01 00:00:00';
                         $batch->run_second = 0;

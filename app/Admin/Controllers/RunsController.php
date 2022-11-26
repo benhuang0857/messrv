@@ -131,9 +131,8 @@ class RunsController extends AdminController
         }
 
         Admin::script('
-            $("form :input").change(function(){
+            setInterval(function(){ 
                 var productId = $("select[name=product_id]").val();
-
                 $.ajax({
                     type: "GET",
                     url: "/ajax/predicttime",
@@ -147,9 +146,9 @@ class RunsController extends AdminController
                         console.log(thrownError);
                     }
                 });
-            });
+            }, 500);
 
-            $("#quantity").change(function(){
+            $("form :input").change(function(){
                 var productId = $("select[name=product_id]").val();
 
                 $.ajax({

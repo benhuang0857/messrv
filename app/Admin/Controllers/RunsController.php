@@ -148,6 +148,24 @@ class RunsController extends AdminController
                     }
                 });
             });
+
+            $("form :button").click(function(){
+                var productId = $("select[name=product_id]").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/ajax/predicttime",
+                    dataType: "json",
+                    data:{pid: productId},
+                    success: function (response) {
+                        var q = $("input[name=quantity]").val();
+                        $("input[name=predict_second]").val(response*q);
+                    },
+                    error: function (thrownError) {
+                        console.log(thrownError);
+                    }
+                });
+            });
         ');
 
         $form->select('order_id', __('訂單ID'))->options($_orderMap);

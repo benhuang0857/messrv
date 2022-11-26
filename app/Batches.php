@@ -30,7 +30,7 @@ class Batches extends Model
 
     public function RealTime()
     {
-        return $this->hasMany('App\BatchStateRecord', 'batch_id', 'id')->take(1);
+        return $this->hasMany('App\BatchStateRecord', 'batch_id', 'id')->first();
     }
 
     public function PiceTime()

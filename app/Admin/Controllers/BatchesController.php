@@ -132,6 +132,23 @@ class BatchesController extends AdminController
         });
         
         $grid->column('RealTime', __('<a href="#">實際時間▼</a>'))->display(function($Records){
+            
+            $batch_id = $Records[0]['batch_id'];
+                $run_second = Batches::where('id', $batch_id)->first()->run_second;
+
+                $startrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'starthold')->get();
+                $eedrecords = BatchStateRecord::where('batch_id', $batch_id)
+                                                ->where('state', 'endhold')->get();
+                $restSec = 0;
+                for ($i=0; $i < sizeof($startrecords); $i++) { 
+                    $start = $startrecords[$i]->created_at;
+                    $end = $eedrecords[$i]->created_at;
+                    $restSec += $start->diffInSeconds($end);
+                }
+
+                return ($run_second - $restSec).'秒(約等於'.round((($run_second - $restSec)/60), 2).'分鐘)';
+            
             try {
                 $batch_id = $Records[0]['batch_id'];
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;

@@ -212,7 +212,7 @@ class BatchesController extends AdminController
                     $restSec += $start->diffInSeconds($end);
                 }
 
-                return -round((($pice/($run_second - $restSec)) - $process_time*$this->qty),2)  .'秒';
+                return -round((($pice/($run_second - $restSec))*$this->qty - $process_time*$this->qty),2)  .'秒';
             } catch (\Throwable $th) {
                 return "--";
             }

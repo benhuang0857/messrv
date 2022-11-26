@@ -581,34 +581,34 @@
         {
             var jobCount = <?php echo $Data['JobCount']?>;
             alert(jobCount);
-            // if(jobCount > 0)
-            // {
-                
-            // }
-            $.ajax({
-                type: "GET",
-                url: "/ajax/process_start",
-                dataType: "json",
-                data:{
-                    batchId: batchId,
-                    doer_id: doer,
-                    tool: tool,
-                },
-                success: function (response) {
-                    if(response == 'ok')
-                    {
-                        alert('開始執行');
+            if(jobCount == 0)
+            {
+                $.ajax({
+                    type: "GET",
+                    url: "/ajax/process_start",
+                    dataType: "json",
+                    data:{
+                        batchId: batchId,
+                        doer_id: doer,
+                        tool: tool,
+                    },
+                    success: function (response) {
+                        if(response == 'ok')
+                        {
+                            alert('開始執行');
+                        }
+                        else
+                        {
+                            alert('您無法執行此操作');
+                        }
+                        location.reload();
+                    },
+                    error: function (thrownError) {
+                        console.log(thrownError);
                     }
-                    else
-                    {
-                        alert('您無法執行此操作');
-                    }
-                    location.reload();
-                },
-                error: function (thrownError) {
-                    console.log(thrownError);
-                }
-            });
+                });
+            }
+            
         }
         else
         {

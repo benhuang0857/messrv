@@ -193,7 +193,7 @@ class RunsController extends AdminController
                 // }
                 $batchNum = [];
                 $i = 0;
-                while($sumQuantity > 0)
+                while(true)
                 {
                     if (($sumQuantity - $eachQuantity) >= 0) {
                         $batchNum[$i] = $eachQuantity;
@@ -202,6 +202,7 @@ class RunsController extends AdminController
                     else
                     {
                         $batchNum[$i] = $sumQuantity;
+                        break;
                     }
                     $i++;
                 }

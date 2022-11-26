@@ -116,7 +116,7 @@ class BatchesController extends AdminController
 
         $grid->column('id', __('<a href="#">總休息時間▼</a>'))->display(function($id){
             
-            $bid = $id;
+            $this->bid = $id;
             
             try {
 

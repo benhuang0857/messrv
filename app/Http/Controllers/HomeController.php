@@ -38,7 +38,11 @@ class HomeController extends Controller
                             ->orwhere('area', $user->department)
                             ->get();
 
-                            // dd($batches[0]->Runs);
+        $batchesNotStart = Batches::where('area', $user->department)
+                            ->where('state', 'pending')
+                            ->get();
+        $jobNotStartCount = count($batchesNotStart);
+
         $batchesNotComplete = Batches::where('doer_id', $uId)
                             ->where('state', '<>', 'complete')
                             ->get();
@@ -93,7 +97,8 @@ class HomeController extends Controller
             'JobCount' => $jobCount,
             'JobHoldCount' => $jobHoldCount,
             'JobCmpleteCount' => $jobCmpleteCount,
-            'JobProcessCount' => $jobProcessCount
+            'JobProcessCount' => $jobProcessCount,
+            'JobNotStartCount' => $jobNotStartCount
         ];
 
         return view('home')->with('Data', $data);

@@ -88,7 +88,12 @@ class BatchesController extends AdminController
                 return '尚未指派';
             }
         });
-        $grid->column('quantity', __('<a href="#">數量▼</a>'));
+
+        $qty = 0;
+        $grid->column('quantity', __('<a href="#">數量▼</a>'))->display(function($quantity){
+            $this->qty = $quantity;
+            return $quantity;
+        });
         $grid->column('scrap', __('<a href="#">報廢▼</a>'));
         $grid->column('start_time', __('<a href="#">開始時間▼</a>'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
@@ -185,7 +190,7 @@ class BatchesController extends AdminController
         });
 
         $grid->column('ProdProcessesList.process_time', __('<a href="#">標準工時▼</a>'))->display(function($process_time){
-            return $process_time.'秒';
+            return $process_time*$qty.'秒';
         });
 
         $grid->column('DiffTime', __('<a href="#">超前工時▼</a>'))->display(function($Records){

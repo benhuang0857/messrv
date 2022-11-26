@@ -142,7 +142,7 @@
                                                 @endforeach --}}
                                                 </select>
                                             </div>
-                                            <div class="form-group" style="display:none">
+                                            <div class="form-group">
                                                 <label for="tool">員工</label>
                                                 <select class="form-control" name="doer_id">
                                                 <option value="Ng">未設定</option>
@@ -396,7 +396,7 @@
                                                     @endforeach --}}
                                                     </select>
                                                 </div>
-                                                <div class="form-group" style="display:none">
+                                                <div class="form-group">
                                                     <label for="tool">員工</label>
                                                     <select class="form-control" name="doer_id">
                                                     <option value="Ng">未設定</option>

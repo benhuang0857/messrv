@@ -139,8 +139,7 @@ class BatchesController extends AdminController
         
         $grid->column('RealTime', __('<a href="#">實際時間▼</a>'))->display(function($Records){
             
-                var_dump($this->bid);
-                $batch_id = $Records[0]['batch_id'];
+                $batch_id = $this->bid;
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;
 
                 $startrecords = BatchStateRecord::where('batch_id', $batch_id)

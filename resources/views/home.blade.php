@@ -104,7 +104,13 @@
                                             ?>
                                             </p>
                                             <p>標準工時：{{$batch->ProdProcessesList->process_time}}秒</p>
-                                            <p>員工：{{$batch->Doer->name}}</p>
+                                            <p>員工：<?php
+                                                try {
+                                                    echo $batch->Doer->name;
+                                                } catch (\Throwable $th) {
+                                                    echo '尚未指派';
+                                                }
+                                            ?></p>
                                             <p>加工編號：{{$batch->run_id}}</p>
                                             <p>箱號：{{$batch->batch_code}}</p>
                                             </a>
@@ -352,7 +358,13 @@
                                             ?>
                                             </p>
                                             <p>標準工時：{{$batch->ProdProcessesList->process_time}}秒</p>
-                                            <p>員工：{{$batch->Doer->name}}</p>
+                                            <p>員工：<?php
+                                                try {
+                                                    echo $batch->Doer->name;
+                                                } catch (\Throwable $th) {
+                                                    echo '尚未指派';
+                                                }
+                                            ?></p>
                                             <p>加工編號：{{$batch->run_id}}</p>
                                             <p>箱號：{{$batch->batch_code}}</p>
                                             </a>

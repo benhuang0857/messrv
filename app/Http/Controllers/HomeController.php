@@ -49,7 +49,7 @@ class HomeController extends Controller
         $jobCount = count($batchesNotComplete);
 
         $batchesHold = Batches::where('doer_id', $uId)
-                            ->where('state', 'hold')
+                            ->where('state', 'starthold')
                             ->get();
         $jobHoldCount = count($batchesHold);
 

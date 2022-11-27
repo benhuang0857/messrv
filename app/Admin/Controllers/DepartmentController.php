@@ -27,9 +27,9 @@ class DepartmentController extends AdminController
         $grid = new Grid(new Department());
 
         $grid->column('id', __('Id'));
-        $grid->column('name', __('Name'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
+        $grid->column('name', __('部門名稱'));
+        $grid->column('created_at', __('建立時間'));
+        $grid->column('updated_at', __('更新時間'));
 
         return $grid;
     }
@@ -61,7 +61,7 @@ class DepartmentController extends AdminController
     {
         $form = new Form(new Department());
 
-        $form->text('name', __('Name'));
+        $form->text('name', __('部門名稱'));
 
         return $form;
     }

@@ -148,15 +148,15 @@ class UserController extends AdminController
             $_departmentsMap[$item->id] = $item->name;
         }
 
-        $form->text('employee_id', __('Employee id'));
-        $form->text('name', __('Name'));
+        $form->text('employee_id', __('工號'));
+        $form->text('name', __('姓名'));
         $form->email('email', __('Email'));
-        $form->select('department', __('Department'))->options($_departmentsMap);
-        $form->text('job_title', __('Job title'));
-        $form->text('gender', __('Gender'));
-        $form->switch('state', __('State'));
-        $form->textarea('note', __('Note'));
-        $form->password('password', __('Password'));
+        $form->select('department', __('部門'))->options($_departmentsMap);
+        $form->text('job_title', __('職稱'));
+        $form->text('gender', __('性別'));
+        $form->switch('state', __('狀態'));
+        $form->textarea('note', __('備註'));
+        $form->password('password', __('密碼'));
 
         $form->saving(function (Form $form) {
             if ($form->password == null)

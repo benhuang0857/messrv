@@ -31,7 +31,21 @@ class ProcessesController extends AdminController
         $grid->column('id', __('<a href="#">Id▼</a>'));
         $grid->column('process_code', __('<a href="#">製程代碼▼</a>'));
         $grid->column('name', __('<a href="#">製程名稱▼</a>'));
-        $grid->column('department', __('<a href="#">負責部門▼</a>'));
+        $grid->column('department', __('<a href="#">部門▼</a>'))->display(function($value){
+            if ($value != NULL) {
+                try {
+                    $dep = Department::where('id', $value)->first();
+                    return $dep->name;
+                } catch (\Throwable $th) {
+                    return '--';
+                }
+                
+            }
+            else
+            {
+                return '--';
+            }
+        });
         $grid->column('process_time', __('<a href="#">製程秒數▼</a>'));
         $grid->column('note', __('<a href="#">備註▼</a>'));
         // $grid->column('created_at', __('Created at'));

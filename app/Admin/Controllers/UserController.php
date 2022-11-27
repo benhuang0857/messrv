@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\User;
+use App\Department;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -134,10 +135,17 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
+        $_departments = Department::all();
+        $_departmentsMap = array();
+        foreach($_departments as $item)
+        {
+            $_departmentsMap[$item->id] = $item->name;
+        }
+
         $form->text('employee_id', __('Employee id'));
         $form->text('name', __('Name'));
         $form->email('email', __('Email'));
-        $form->text('department', __('Department'));
+        $form->select('department', __('Department'))->options($_departmentsMap);
         $form->text('job_title', __('Job title'));
         $form->text('gender', __('Gender'));
         $form->switch('state', __('State'));

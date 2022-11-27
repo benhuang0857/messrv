@@ -197,6 +197,12 @@ class RunsController extends AdminController
                 $eachQuantity = intval($form->each_quantity);
                 $sumPPL = sizeof($ProdProcessesList); //Count of ProdProcessesList
 
+                $departmentIdList = array();
+
+                foreach ($ProdProcessesList as $item) {
+                    array_push($departmentIdList, $item->department);
+                }
+
                 // $batchNum = [];
                 // for ($i=0; $i < $sumPPL; $i++) { 
                 //     if (($sumQuantity - $eachQuantity) >= 0) {
@@ -237,6 +243,7 @@ class RunsController extends AdminController
                         $batch->prod_processes_list_id = $process->id;
                         // $batch->doer_id = $form->maker_id;
                         $batch->quantity = $batchNum[$i];
+                        $batch->area = $departmentIdList[$key];
                         $batch->start_time = '1000-01-01 00:00:00';
                         $batch->end_time = '1000-01-01 00:00:00';
                         $batch->run_second = 0;

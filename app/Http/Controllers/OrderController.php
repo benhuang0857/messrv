@@ -17,6 +17,16 @@ class OrderController extends Controller
         }
     }
 
+    public function get(Request $req)
+    {
+        $Data = array('Orders' => Orders::where("id", $req->id)->first());
+        try {
+            return json_encode(Orders::where("id", $req->id)->first(), JSON_UNESCAPED_UNICODE);
+        } catch (\Throwable $th) {
+            return json_encode('err');
+        }
+    }
+
     public function update(Request $req)
     {
         try {

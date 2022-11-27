@@ -220,16 +220,20 @@ class BatchesController extends AdminController
             
         });
 
-        $grid->column('area', __('<a href="#">負責區域/部門▼</a>'))->display(function($area){
+        $grid->column('area', __('<a href="#">負責區域/部門▼</a>'))->display(function($value){
             
-            // dd($area);
-            
-            if ($area == NULL) {
-                return '--';
+            if ($value != NULL) {
+                try {
+                    $dep = Department::where('id', $value)->first();
+                    return $dep->name;
+                } catch (\Throwable $th) {
+                    return '--';
+                }
+                
             }
             else
             {
-                return $area;
+                return '--';
             }
             
         });

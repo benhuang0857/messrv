@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Processes;
+use App\Department;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -30,6 +31,7 @@ class ProcessesController extends AdminController
         $grid->column('id', __('<a href="#">Id▼</a>'));
         $grid->column('process_code', __('<a href="#">製程代碼▼</a>'));
         $grid->column('name', __('<a href="#">製程名稱▼</a>'));
+        $grid->column('department', __('<a href="#">負責部門▼</a>'));
         $grid->column('process_time', __('<a href="#">製程秒數▼</a>'));
         $grid->column('note', __('<a href="#">備註▼</a>'));
         // $grid->column('created_at', __('Created at'));
@@ -74,8 +76,16 @@ class ProcessesController extends AdminController
     {
         $form = new Form(new Processes());
 
+        $_departments = Department::all();
+        $_departmentsMap = array();
+        foreach($_departments as $item)
+        {
+            $_departmentsMap[$item->id] = $item->name;
+        }
+
         $form->text('process_code', __('製程代碼'));
         $form->text('name', __('製程名稱'));
+        $form->select('department', __('負責部門'))->options($_departmentsMap);
         $form->number('process_time', __('製程秒數'))->default(0);
         $form->textarea('note', __('備註'));
 

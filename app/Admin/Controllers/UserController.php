@@ -73,7 +73,7 @@ class UserController extends AdminController
             }
         });
         $grid->column('job_title', __('<a href="#">職稱▼</a>'));
-        $grid->column('gender', __('<a href="#">姓名▼</a>'))->display(function($value){
+        $grid->column('gender', __('<a href="#">性別▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }

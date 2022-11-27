@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\ProdProcessesList;
 use App\Products;
 use App\Processes;
+use App\Department;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -33,6 +34,21 @@ class ProdProcessesListController extends AdminController
         $grid->column('Products.product_code', __('<a href="#">產品代碼▼</a>'));
         $grid->column('Processes.process_code', __('<a href="#">製程代碼▼</a>'));
         $grid->column('order', __('<a href="#">排序▼</a>'));
+        $grid->column('department', __('<a href="#">部門▼</a>'))->display(function($value){
+            if ($value != NULL) {
+                try {
+                    $dep = Department::where('id', $value)->first();
+                    return $dep->name;
+                } catch (\Throwable $th) {
+                    return '--';
+                }
+                
+            }
+            else
+            {
+                return '--';
+            }
+        });
         $grid->column('process_time', __('<a href="#">執行秒數▼</a>'));
         $grid->column('min_slot', __('<a href="#">最少執行數量▼</a>'));
         $grid->column('max_slot', __('<a href="#">最多執行數量▼</a>'));
@@ -98,9 +114,17 @@ class ProdProcessesListController extends AdminController
             $_processMap[$item->id] = $item->process_code;
         }
 
+        $_departments = Department::all();
+        $_departmentsMap = array();
+        foreach($_departments as $item)
+        {
+            $_departmentsMap[$item->id] = $item->name;
+        }
+
         $form->select('product_id', __('產品代碼'))->options($_productMap);
         $form->select('process_id', __('製程代碼'))->options($_processMap);
         $form->number('order', __('排序'))->default(0);
+        $form->select('department', __('負責部門'))->options($_departmentsMap);
         $form->number('process_time', __('執行秒數'))->default(0);
         $form->number('max_slot', __('最少執行數量'))->default(0);
         $form->number('min_slot', __('最多執行數量'))->default(0);

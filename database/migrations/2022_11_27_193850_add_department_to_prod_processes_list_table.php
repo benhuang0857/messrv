@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDepartmentToProcessesTable extends Migration
+class AddDepartmentToProdProcessesListTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddDepartmentToProcessesTable extends Migration
      */
     public function up()
     {
-        Schema::table('processes', function (Blueprint $table) {
+        Schema::table('prod_processes_list', function (Blueprint $table) {
             $table->string('department')->comment('負責部門');
         });
     }
@@ -25,7 +25,7 @@ class AddDepartmentToProcessesTable extends Migration
      */
     public function down()
     {
-        Schema::table('processes', function (Blueprint $table) {
+        Schema::table('prod_processes_list', function (Blueprint $table) {
             $table->dropColumn('department');
         });
     }

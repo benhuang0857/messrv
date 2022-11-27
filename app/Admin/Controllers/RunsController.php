@@ -203,8 +203,6 @@ class RunsController extends AdminController
                     array_push($departmentIdList, $item->department);
                 }
 
-                dd($departmentIdList);
-
                 // $batchNum = [];
                 // for ($i=0; $i < $sumPPL; $i++) { 
                 //     if (($sumQuantity - $eachQuantity) >= 0) {

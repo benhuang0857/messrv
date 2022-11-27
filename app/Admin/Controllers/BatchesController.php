@@ -221,6 +221,9 @@ class BatchesController extends AdminController
         });
 
         $grid->column('area', __('<a href="#">負責區域/部門▼</a>'))->display(function($area){
+            
+            dd($area);
+            
             if ($area == NULL) {
                 return '--';
             }

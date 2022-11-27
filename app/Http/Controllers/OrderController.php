@@ -12,7 +12,7 @@ class OrderController extends Controller
         try {
             return json_encode(Orders::all());
         } catch (\Throwable $th) {
-            return json_encode('err');
+            return json_encode('err', JSON_UNESCAPED_UNICODE);
         }
     }
 

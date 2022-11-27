@@ -449,61 +449,7 @@
                                                     echo '--';
                                                 }
                                             ?></p>
-                                            {{-- <p>訂單建立時間：{{$batch->Runs->Order->created_at}} </p>
-                                            <p>製程與產品: {{$batch->ProdProcessesList->Processes->process_code}}{{$batch->ProdProcessesList->Products->product_name}}</p>
-                                            <p>數量：{{$batch->quantity}}</p>
-                                            <p>總時間：{{$batch->run_second.'秒(約等於'.round(($batch->run_second/60), 2).'分鐘)'}}</p>
-                                            <p>總休息：<?php
-                                                try {
-                                                    $startrecords = App\BatchStateRecord::where('batch_id', $batch->id)
-                                                                                    ->where('state', 'starthold')->get();
-                                                    $eedrecords = App\BatchStateRecord::where('batch_id', $batch->id)
-                                                                                    ->where('state', 'endhold')->get();
-                                                    $restSec = 0;
-                                                    for ($i=0; $i < sizeof($startrecords); $i++) { 
-                                                        $start = $startrecords[$i]->created_at;
-                                                        $end = $eedrecords[$i]->created_at;
-                                                        $restSec += $start->diffInSeconds($end);
-                                                    }
-
-                                                    echo $restSec.'秒(約等於'.round(($restSec/60), 2).'分鐘)';
-                                                } catch (\Throwable $th) {
-                                                    echo "--";
-                                                }
-                                            ?></p>
-                                            <p>單位工時：<?php
-                                                try {
-                                                    $batch_id = $batch->id;
-                                                    $pice = App\Batches::where('id', $batch_id)->first()->quantity;
-                                                    $run_second = App\Batches::where('id', $batch_id)->first()->run_second;
-
-                                                    $startrecords = App\BatchStateRecord::where('batch_id', $batch_id)
-                                                                                    ->where('state', 'starthold')->get();
-                                                    $eedrecords = App\BatchStateRecord::where('batch_id', $batch_id)
-                                                                                    ->where('state', 'endhold')->get();
-                                                    $restSec = 0;
-                                                    for ($i=0; $i < sizeof($startrecords); $i++) { 
-                                                        $start = $startrecords[$i]->created_at;
-                                                        $end = $eedrecords[$i]->created_at;
-                                                        $restSec += $start->diffInSeconds($end);
-                                                    }
-
-                                                    echo round(($pice/($run_second - $restSec)),2)  .'秒';
-                                                } catch (\Throwable $th) {
-                                                    echo "--";
-                                                }
-                                            ?>
-                                            </p>
-                                            <p>標準工時：{{$batch->ProdProcessesList->process_time}}秒</p>
-                                            <p>員工：<?php
-                                                try {
-                                                    echo $batch->Doer->name;
-                                                } catch (\Throwable $th) {
-                                                    echo '尚未指派';
-                                                }
-                                            ?></p>
-                                            <p>加工編號：{{$batch->run_id}}</p>
-                                            <p>箱號：{{$batch->batch_code}}</p> --}}
+                                            
                                             </a>
                                         </h4>
                                     </div>

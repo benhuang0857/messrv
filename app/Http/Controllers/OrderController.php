@@ -9,8 +9,11 @@ class OrderController extends Controller
 {
     public function all(Request $req)
     {
+        $Data = [
+            'Orders' => Orders::all()
+        ];
         try {
-            return json_encode(Orders::all(), JSON_UNESCAPED_UNICODE);
+            return json_encode($Data, JSON_UNESCAPED_UNICODE);
         } catch (\Throwable $th) {
             return json_encode('err');
         }

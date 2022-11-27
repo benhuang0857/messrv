@@ -10,9 +10,9 @@ class OrderController extends Controller
     public function all(Request $req)
     {
         try {
-            return json_encode(Orders::all());
+            return json_encode(Orders::all(), JSON_UNESCAPED_UNICODE);
         } catch (\Throwable $th) {
-            return json_encode('err', JSON_UNESCAPED_UNICODE);
+            return json_encode('err');
         }
     }
 

@@ -60,7 +60,7 @@ class UserController extends AdminController
         $grid->column('department', __('<a href="#">部門▼</a>'))->display(function($value){
             if ($value != NULL) {
                 $dep = Department::where('id', $value)->first();
-                return $dep['name'];
+                return $dep[0]['name'];
             }
             else
             {

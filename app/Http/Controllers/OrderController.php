@@ -10,7 +10,7 @@ class OrderController extends Controller
     public function all(Request $req)
     {
         $Data = [
-            'Orders' => Orders::all()
+            'Orders' => json_encode(Orders::all(), JSON_UNESCAPED_UNICODE) //Orders::all()
         ];
         try {
             return json_encode($Data, JSON_UNESCAPED_UNICODE);

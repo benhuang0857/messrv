@@ -8,6 +8,7 @@ use App\Products;
 use App\Processes;
 use App\User;
 use App\ProdProcessesList;
+use App\Department;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;

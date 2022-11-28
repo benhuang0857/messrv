@@ -112,7 +112,10 @@ class OrdersController extends AdminController
         $form->text('order_code', __('訂單號'))->default(uniqid());
         $form->select('customer_id', __('客戶'))->options($_customerMap);
 
-        $form->text('status', __('狀態'));
+        $form->select('status', __('狀態'))->options([
+            'pending' => '尚未付款',
+            'compelete' => '完成付款'
+        ])->default('pending');
 
         return $form;
     }

@@ -8,10 +8,10 @@
                 <div class="panel-heading">任務</div>
                 <div class="panel-heading">
                     {{-- <a href="?show=all"><span class="badge badge-primary" style="padding:10px">所有</span></a> --}}
-                    <a href="?show=approve"><span class="badge badge-primary" style="padding:10px">等待加工</span></a>
-                    <a href="?show=process"><span class="badge badge-primary" style="padding:10px">進行中</span></a>
-                    <a href="?show=complete"><span class="badge badge-primary" style="padding:10px">完成</span></a>
-                    <a href="?show=starthold"><span class="badge badge-primary" style="padding:10px">暫停</span></a>
+                    <a href="?show=approve"><span class="badge badge-primary" style="padding:10px">等待加工({{$Data['JobNotStartCount']}})</span></a>
+                    <a href="?show=process"><span class="badge badge-primary" style="padding:10px">進行中({{$Data['JobProcessCount']}})</span></a>
+                    <a href="?show=complete"><span class="badge badge-primary" style="padding:10px">完成({{$Data['JobCmpleteCount']}})</span></a>
+                    <a href="?show=starthold"><span class="badge badge-primary" style="padding:10px">暫停({{$Data['JobHoldCount']}})</span></a>
                 </div>
                 <div class="panel-body">
                     @if (session('status'))
@@ -58,10 +58,34 @@
                                             <a data-toggle="collapse" data-parent="#accordion" 
                                             href="#collapse{{$batch->id}}">
                                             <p><span class="badge badge-secondary" style="background:<?php echo $Data['Color'][$batch->state]?>">{{$Data['States'][$batch->state]}}</span></p>
-                                            <p>訂單建立時間：{{$batch->Runs->Order->created_at}} </p>
-                                            <p>製程與產品: {{$batch->ProdProcessesList->Processes->process_code}}{{$batch->ProdProcessesList->Products->product_name}}</p>
-                                            <p>數量：{{$batch->quantity}}</p>
-                                            <p>總時間：{{$batch->run_second.'秒(約等於'.round(($batch->run_second/60), 2).'分鐘)'}}</p>
+                                            <p>訂單建立時間：<?php
+                                                try {
+                                                    echo $batch->Runs->Order->created_at;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>製程與產品: <?php
+                                                try {
+                                                    echo $batch->ProdProcessesList->Processes->process_code.$batch->ProdProcessesList->Products->product_name;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>數量：<?php
+                                                try {
+                                                    echo $batch->quantity;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>總時間：<?php
+                                                try {
+                                                    echo $batch->run_second.'秒(約等於'.round(($batch->run_second/60), 2).'分鐘)';
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
                                             <p>總休息：<?php
                                                 try {
                                                     $startrecords = App\BatchStateRecord::where('batch_id', $batch->id)
@@ -101,12 +125,35 @@
                                                 } catch (\Throwable $th) {
                                                     echo "--";
                                                 }
-                                            ?>
-                                            </p>
-                                            <p>標準工時：{{$batch->ProdProcessesList->process_time}}秒</p>
-                                            <p>員工：{{$batch->Doer->name}}</p>
-                                            <p>加工編號：{{$batch->run_id}}</p>
-                                            <p>箱號：{{$batch->batch_code}}</p>
+                                            ?></p>
+                                            <p>標準工時：<?php
+                                                try {
+                                                    echo $batch->ProdProcessesList->process_time.'秒';
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>員工：<?php
+                                                try {
+                                                    echo $batch->Doer->name;
+                                                } catch (\Throwable $th) {
+                                                    echo '尚未指派';
+                                                }
+                                            ?></p>
+                                            <p>加工編號：<?php
+                                                try {
+                                                    echo $batch->run_id;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>箱號：<?php
+                                                try {
+                                                    echo $batch->batch_code;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
                                             </a>
                                         </h4>
                                     </div>
@@ -136,7 +183,7 @@
                                                 @endforeach --}}
                                                 </select>
                                             </div>
-                                            <div class="form-group" style="display:none">
+                                            <div class="form-group">
                                                 <label for="tool">員工</label>
                                                 <select class="form-control" name="doer_id">
                                                 <option value="Ng">未設定</option>
@@ -306,10 +353,34 @@
                                             <a data-toggle="collapse" data-parent="#accordion" 
                                             href="#collapse{{$batch->id}}">
                                             <p><span class="badge badge-secondary" style="background:<?php echo $Data['Color'][$batch->state]?>">{{$Data['States'][$batch->state]}}</span></p>
-                                            <p>訂單建立時間：{{$batch->Runs->Order->created_at}} </p>
-                                            <p>製程與產品: {{$batch->ProdProcessesList->Processes->process_code}}{{$batch->ProdProcessesList->Products->product_name}}</p>
-                                            <p>數量：{{$batch->quantity}}</p>
-                                            <p>總時間：{{$batch->run_second.'秒(約等於'.round(($batch->run_second/60), 2).'分鐘)'}}</p>
+                                            <p>訂單建立時間：<?php
+                                                try {
+                                                    echo $batch->Runs->Order->created_at;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>製程與產品: <?php
+                                                try {
+                                                    echo $batch->ProdProcessesList->Processes->process_code.$batch->ProdProcessesList->Products->product_name;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>數量：<?php
+                                                try {
+                                                    echo $batch->quantity;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>總時間：<?php
+                                                try {
+                                                    echo $batch->run_second.'秒(約等於'.round(($batch->run_second/60), 2).'分鐘)';
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
                                             <p>總休息：<?php
                                                 try {
                                                     $startrecords = App\BatchStateRecord::where('batch_id', $batch->id)
@@ -349,12 +420,36 @@
                                                 } catch (\Throwable $th) {
                                                     echo "--";
                                                 }
-                                            ?>
-                                            </p>
-                                            <p>標準工時：{{$batch->ProdProcessesList->process_time}}秒</p>
-                                            <p>員工：{{$batch->Doer->name}}</p>
-                                            <p>加工編號：{{$batch->run_id}}</p>
-                                            <p>箱號：{{$batch->batch_code}}</p>
+                                            ?></p>
+                                            <p>標準工時：<?php
+                                                try {
+                                                    echo $batch->ProdProcessesList->process_time.'秒';
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>員工：<?php
+                                                try {
+                                                    echo $batch->Doer->name;
+                                                } catch (\Throwable $th) {
+                                                    echo '尚未指派';
+                                                }
+                                            ?></p>
+                                            <p>加工編號：<?php
+                                                try {
+                                                    echo $batch->run_id;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            <p>箱號：<?php
+                                                try {
+                                                    echo $batch->batch_code;
+                                                } catch (\Throwable $th) {
+                                                    echo '--';
+                                                }
+                                            ?></p>
+                                            
                                             </a>
                                         </h4>
                                     </div>
@@ -384,7 +479,7 @@
                                                     @endforeach --}}
                                                     </select>
                                                 </div>
-                                                <div class="form-group" style="display:none">
+                                                <div class="form-group">
                                                     <label for="tool">員工</label>
                                                     <select class="form-control" name="doer_id">
                                                     <option value="Ng">未設定</option>
@@ -567,30 +662,40 @@
 
         if(tool != 'Ng' || doer != 'Ng')
         {
-            $.ajax({
-                type: "GET",
-                url: "/ajax/process_start",
-                dataType: "json",
-                data:{
-                    batchId: batchId,
-                    doer_id: doer,
-                    tool: tool,
-                },
-                success: function (response) {
-                    if(response == 'ok')
-                    {
-                        alert('開始執行');
+            var jobCount = <?php echo $Data['JobCount']?>;
+            
+            if(jobCount == 0)
+            {
+                $.ajax({
+                    type: "GET",
+                    url: "/ajax/process_start",
+                    dataType: "json",
+                    data:{
+                        batchId: batchId,
+                        doer_id: doer,
+                        tool: tool,
+                    },
+                    success: function (response) {
+                        if(response == 'ok')
+                        {
+                            alert('開始執行');
+                        }
+                        else
+                        {
+                            alert('您無法執行此操作');
+                        }
+                        location.reload();
+                    },
+                    error: function (thrownError) {
+                        console.log(thrownError);
                     }
-                    else
-                    {
-                        alert('您無法執行此操作');
-                    }
-                    location.reload();
-                },
-                error: function (thrownError) {
-                    console.log(thrownError);
-                }
-            });
+                });
+            }
+            else
+            {
+                alert("尚有"+jobCount+"筆工作未完成，請先完成!");
+            }
+            
         }
         else
         {

@@ -8,6 +8,7 @@ use App\Products;
 use App\Processes;
 use App\User;
 use App\ProdProcessesList;
+use App\Department;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -88,7 +89,12 @@ class BatchesController extends AdminController
                 return '尚未指派';
             }
         });
-        $grid->column('quantity', __('<a href="#">數量▼</a>'));
+
+        $qty = 0;
+        $grid->column('quantity', __('<a href="#">數量▼</a>'))->display(function($quantity){
+            $this->qty = $quantity;
+            return $quantity;
+        });
         $grid->column('scrap', __('<a href="#">報廢▼</a>'));
         $grid->column('start_time', __('<a href="#">開始時間▼</a>'))->display(function($start_time){
             if ($start_time == '1000-01-01 00:00:00') {
@@ -111,7 +117,13 @@ class BatchesController extends AdminController
         $grid->column('run_second', __('<a href="#">總時間▼</a>'))->display(function($time){
             return $time.'秒(約等於'.round(($time/60), 2).'分鐘)';
         });
+
+        $bid = null;
+
         $grid->column('id', __('<a href="#">總休息時間▼</a>'))->display(function($id){
+            
+            $this->bid = $id;
+            
             try {
 
                 $startrecords = BatchStateRecord::where('batch_id', $id)
@@ -133,7 +145,7 @@ class BatchesController extends AdminController
         
         $grid->column('RealTime', __('<a href="#">實際時間▼</a>'))->display(function($Records){
             try {
-                $batch_id = $Records[0]['batch_id'];
+                $batch_id = $this->bid;
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;
 
                 $startrecords = BatchStateRecord::where('batch_id', $batch_id)
@@ -156,7 +168,7 @@ class BatchesController extends AdminController
 
         $grid->column('PiceTime', __('<a href="#">單位工時▼</a>'))->display(function($Records){
             try {
-                $batch_id = $Records[0]['batch_id'];
+                $batch_id = $this->bid;
                 $pice = Batches::where('id', $batch_id)->first()->quantity;
                 $run_second = Batches::where('id', $batch_id)->first()->run_second;
 
@@ -179,12 +191,12 @@ class BatchesController extends AdminController
         });
 
         $grid->column('ProdProcessesList.process_time', __('<a href="#">標準工時▼</a>'))->display(function($process_time){
-            return $process_time.'秒';
+            return $process_time*$this->qty.'秒';
         });
 
         $grid->column('DiffTime', __('<a href="#">超前工時▼</a>'))->display(function($Records){
             try {
-                $batch_id = $Records[0]['batch_id'];
+                $batch_id = $this->bid;
                 $ppId = Batches::where('id', $batch_id)->first()->prod_processes_list_id;
                 $process_time = ProdProcessesList::where('id', $ppId)->first()->process_time;
                 $pice = Batches::where('id', $batch_id)->first()->quantity;
@@ -201,20 +213,27 @@ class BatchesController extends AdminController
                     $restSec += $start->diffInSeconds($end);
                 }
 
-                return round((($pice/($run_second - $restSec)) - $process_time),2)  .'秒';
+                return -round((($pice/($run_second - $restSec))*$this->qty - $process_time*$this->qty),2)  .'秒';
             } catch (\Throwable $th) {
                 return "--";
             }
             
         });
 
-        $grid->column('area', __('<a href="#">負責區域/部門▼</a>'))->display(function($area){
-            if ($area == NULL) {
-                return '--';
+        $grid->column('area', __('<a href="#">負責區域/部門▼</a>'))->display(function($value){
+            
+            if ($value != NULL) {
+                try {
+                    $dep = Department::where('id', $value)->first();
+                    return $dep->name;
+                } catch (\Throwable $th) {
+                    return '--';
+                }
+                
             }
             else
             {
-                return $area;
+                return '--';
             }
             
         });
@@ -293,14 +312,25 @@ class BatchesController extends AdminController
             $_prodProcessesListMap[$item->id] = $item->Processes->process_code.'('.$item->Products->product_name.')';
         }
 
+        $_departments = Department::all();
+        $_departmentsMap = array();
+        foreach($_departments as $item)
+        {
+            $_departmentsMap[$item->id] = $item->name;
+        }
+
         $form->text('batch_code', __('批號'))->readonly();
         $form->text('run_id', __('工單'))->readonly();
         $form->select('prod_processes_list_id', __('製程與產品'))->options($_prodProcessesListMap)->readonly();
         $form->select('doer_id', __('員工'))->options($_userMap);
-        $form->select('area', __('負責區域/部門'))->options([
-            'PHOTO' => 'PHOTO',
-            'CVD' => 'CVD'
-        ]);
+        
+        $form->select('area', __('負責區域/部門'))->options($_departmentsMap);
+        
+        // $form->select('area', __('負責區域/部門'))->options([
+        //     'PHOTO' => 'PHOTO',
+        //     'CVD' => 'CVD'
+        // ]);
+
         $form->number('quantity', __('數量'))->default(1);
         $form->number('scrap', __('報廢'))->default(0);
         $form->datetime('start_time', __('開始時間'))->default(date('Y-m-d H:i:s'));

@@ -25,6 +25,8 @@ Route::group([
 
     $router->resource('runs', RunsController::class);
     $router->resource('batches', BatchesController::class);
+    
+    $router->resource('departments', DepartmentController::class);
 
     $router->resource('orders', OrdersController::class);
     $router->resource('batch-state-records', BatchStateRecordController::class);

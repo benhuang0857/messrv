@@ -131,7 +131,24 @@ class RunsController extends AdminController
         }
 
         Admin::script('
-            $("select[name=product_id]").change(function(){
+            setInterval(function(){ 
+                var productId = $("select[name=product_id]").val();
+                $.ajax({
+                    type: "GET",
+                    url: "/ajax/predicttime",
+                    dataType: "json",
+                    data:{pid: productId},
+                    success: function (response) {
+                        var q = $("input[name=quantity]").val();
+                        $("input[name=predict_second]").val(response*q);
+                    },
+                    error: function (thrownError) {
+                        console.log(thrownError);
+                    }
+                });
+            }, 500);
+
+            $("form :input").change(function(){
                 var productId = $("select[name=product_id]").val();
 
                 $.ajax({
@@ -180,8 +197,27 @@ class RunsController extends AdminController
                 $eachQuantity = intval($form->each_quantity);
                 $sumPPL = sizeof($ProdProcessesList); //Count of ProdProcessesList
 
+                $departmentIdList = array();
+
+                foreach ($ProdProcessesList as $item) {
+                    array_push($departmentIdList, $item->department);
+                }
+
+                // $batchNum = [];
+                // for ($i=0; $i < $sumPPL; $i++) { 
+                //     if (($sumQuantity - $eachQuantity) >= 0) {
+                //         $batchNum[$i] = $eachQuantity;
+                //         $sumQuantity -= $eachQuantity;
+                //     }
+                //     else
+                //     {
+                //         $batchNum[$i] = $sumQuantity;
+                //     }
+                // }
                 $batchNum = [];
-                for ($i=0; $i < $sumPPL; $i++) { 
+                $i = 0;
+                while(true)
+                {
                     if (($sumQuantity - $eachQuantity) >= 0) {
                         $batchNum[$i] = $eachQuantity;
                         $sumQuantity -= $eachQuantity;
@@ -189,7 +225,9 @@ class RunsController extends AdminController
                     else
                     {
                         $batchNum[$i] = $sumQuantity;
+                        break;
                     }
+                    $i++;
                 }
 
                 foreach ($ProdProcessesList as $key => $process) {
@@ -205,6 +243,7 @@ class RunsController extends AdminController
                         $batch->prod_processes_list_id = $process->id;
                         // $batch->doer_id = $form->maker_id;
                         $batch->quantity = $batchNum[$i];
+                        $batch->area = $departmentIdList[$key];
                         $batch->start_time = '1000-01-01 00:00:00';
                         $batch->end_time = '1000-01-01 00:00:00';
                         $batch->run_second = 0;

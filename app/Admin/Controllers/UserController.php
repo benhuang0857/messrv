@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\User;
+use App\Department;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -58,7 +59,13 @@ class UserController extends AdminController
         $grid->column('name', __('<a href="#">姓名▼</a>'));
         $grid->column('department', __('<a href="#">部門▼</a>'))->display(function($value){
             if ($value != NULL) {
-                return $value;
+                try {
+                    $dep = Department::where('id', $value)->first();
+                    return $dep->name;
+                } catch (\Throwable $th) {
+                    return '--';
+                }
+                
             }
             else
             {
@@ -66,7 +73,7 @@ class UserController extends AdminController
             }
         });
         $grid->column('job_title', __('<a href="#">職稱▼</a>'));
-        $grid->column('gender', __('<a href="#">姓名▼</a>'))->display(function($value){
+        $grid->column('gender', __('<a href="#">性別▼</a>'))->display(function($value){
             if ($value != NULL) {
                 return $value;
             }
@@ -134,15 +141,22 @@ class UserController extends AdminController
     {
         $form = new Form(new User());
 
-        $form->text('employee_id', __('Employee id'));
-        $form->text('name', __('Name'));
+        $_departments = Department::all();
+        $_departmentsMap = array();
+        foreach($_departments as $item)
+        {
+            $_departmentsMap[$item->id] = $item->name;
+        }
+
+        $form->text('employee_id', __('工號'));
+        $form->text('name', __('姓名'));
         $form->email('email', __('Email'));
-        $form->text('department', __('Department'));
-        $form->text('job_title', __('Job title'));
-        $form->text('gender', __('Gender'));
-        $form->switch('state', __('State'));
-        $form->textarea('note', __('Note'));
-        $form->password('password', __('Password'));
+        $form->select('department', __('部門'))->options($_departmentsMap);
+        $form->text('job_title', __('職稱'));
+        $form->text('gender', __('性別'));
+        $form->switch('state', __('狀態'));
+        $form->textarea('note', __('備註'));
+        $form->password('password', __('密碼'));
 
         $form->saving(function (Form $form) {
             if ($form->password == null)

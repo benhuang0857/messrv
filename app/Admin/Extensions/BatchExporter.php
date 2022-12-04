@@ -7,6 +7,7 @@ use App\BatchStateRecord;
 use App\Processes;
 use App\Products;
 use App\ProdProcessesList;
+use App\Department;
 use App\User;
 use Encore\Admin\Grid\Exporters\ExcelExporter;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -147,8 +148,12 @@ class BatchExporter extends ExcelExporter implements WithMapping
         }
 
         // 負責區域/部門
-        $dep = Department::where('id', $row->area)->first();
+        try {
+            $dep = Department::where('id', $row->area)->first();
             $area = $dep->name;
+        } catch (\Throwable $th) {
+            $area = '--';
+        }
 
         // 狀態
         $stateArr = [

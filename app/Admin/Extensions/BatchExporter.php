@@ -5,6 +5,7 @@ namespace App\Admin\Extensions;
 use App\Batches;
 use App\BatchStateRecord;
 use App\Processes;
+use App\Products;
 use App\ProdProcessesList;
 use App\User;
 use Encore\Admin\Grid\Exporters\ExcelExporter;

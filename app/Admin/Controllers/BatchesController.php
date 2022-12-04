@@ -16,6 +16,8 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\BatchExporter;
+
 class BatchesController extends AdminController
 {
     /**
@@ -33,6 +35,8 @@ class BatchesController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Batches());
+
+        $grid->exporter(new BatchExporter());
 
         $grid->filter(function($filter){
             $_products = Products::all();

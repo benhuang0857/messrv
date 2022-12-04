@@ -1,0 +1,16 @@
+<table>
+    <thead>
+    <tr>
+        <th>進駐單位</th>
+        <th>自然人/組織/公司名稱</th>
+        <th>總計</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1232</td>
+            <td>1232</td>
+            <td>1232</td>
+        </tr>
+    </tbody>
+</table>

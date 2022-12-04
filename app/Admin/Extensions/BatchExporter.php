@@ -51,7 +51,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
         if ($end_time == '1000-01-01 00:00:00')
             $end_time = '--';
 
-        $prodProcessesList = ProdProcessesList::where('id', $row->id)->first();
+        $prodProcessesList = ProdProcessesList::where('id', Batches::where('id', $row->id)->first()->ProdProcessesList->id)->first();
         $processId = $prodProcessesList->process_id;
         $productId = $prodProcessesList->product_id;
         $processesName = Processes::where('id', $processId)->first()->name;
@@ -170,7 +170,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
             $row->batch_code,
             $row->run_id,
             Batches::where('id', $row->id)->first()->ProdProcessesList->order,
-            Batches::where('id', $row->id)->first()->ProdProcessesList->id,
+            $prod_processes_name,
             ($row->doer_id==null)?'尚未指派':User::where('id', $row->doer_id)->first()->name,
             $row->quantity,
             // $row->scrap,

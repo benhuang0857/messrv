@@ -4,6 +4,8 @@ namespace App\Admin\Extensions;
 
 use App\Batches;
 use App\BatchStateRecord;
+use App\Processes;
+use App\ProdProcessesList;
 use App\User;
 use Encore\Admin\Grid\Exporters\ExcelExporter;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -37,6 +39,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
     {
         $start_time = $row->start_time;
         $end_time = $row->end_time;
+        $prod_processes_name = '--';
         $total_rest = '--';
         $real_time = '--';
         $pice_time = '--';
@@ -47,6 +50,13 @@ class BatchExporter extends ExcelExporter implements WithMapping
             $start_time = '--';
         if ($end_time == '1000-01-01 00:00:00')
             $end_time = '--';
+
+        $prodProcessesList = ProdProcessesList::where('id', $row->id)->first();
+        $processId = $prodProcessesList->process_id;
+        $productId = $prodProcessesList->product_id;
+        $processesName = Processes::where('id', $processId)->first()->name;
+        $productsName = Products::where('id', $productId)->first()->product_code;
+        $prod_processes_name = $processesName.'-'.$productsName;
 
         // 總休息時間
         try {

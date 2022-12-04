@@ -122,9 +122,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
         }
 
         // 超前工時
-        dd($row->id);
-        try {
-            $batch_id = $row->id;
+        $batch_id = $row->id;
             $ppId = Batches::where('id', $batch_id)->first()->prod_processes_list_id;
             $process_time = ProdProcessesList::where('id', $ppId)->first()->process_time;
             $pice = Batches::where('id', $batch_id)->first()->quantity;
@@ -143,9 +141,6 @@ class BatchExporter extends ExcelExporter implements WithMapping
 
             $reusltTime = round(($process_time*$this->qty - $run_second), 2);
             $diff_time = $reusltTime;
-        } catch (\Throwable $th) {
-            $diff_time = "--";
-        }
 
         // 負責區域/部門
         try {

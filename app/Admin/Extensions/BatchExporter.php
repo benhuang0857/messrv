@@ -148,7 +148,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
 
         // 負責區域/部門
         try {
-            $dep = Department::where('id', $row->id)->first();
+            $dep = Department::where('id', $row->area)->first();
             $area = $dep->name;
         } catch (\Throwable $th) {
             $area = '--';

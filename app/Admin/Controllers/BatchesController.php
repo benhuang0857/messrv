@@ -238,7 +238,6 @@ class BatchesController extends AdminController
                 } catch (\Throwable $th) {
                     return '--';
                 }
-                
             }
             else
             {

@@ -61,7 +61,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
                 $restSec += $start->diffInSeconds($end);
             }
 
-            $total_rest = $restSec.'秒(約等於'.round(($restSec/60), 2).'分鐘)';
+            $total_rest = $restSec;
         } catch (\Throwable $th) {
             $total_rest = "--";
         }
@@ -82,7 +82,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
                 $restSec += $start->diffInSeconds($end);
             }
 
-            $real_time = ($run_second - $restSec).'秒(約等於'.round((($run_second - $restSec)/60), 2).'分鐘)';
+            $real_time = ($run_second - $restSec);
         } catch (\Throwable $th) {
             $real_time = "--";
         }
@@ -105,7 +105,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
             }
 
             $reusltTime = ($run_second - $restSec)/$pice;
-            $pice_time = round($reusltTime, 2).'秒';
+            $pice_time = round($reusltTime, 2);
         } catch (\Throwable $th) {
             $pice_time = "--";
         }
@@ -130,7 +130,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
             }
 
             $reusltTime = round(($process_time*$this->qty - $run_second), 2);
-            $diff_time = $reusltTime.'秒';
+            $diff_time = $reusltTime;
         } catch (\Throwable $th) {
             $diff_time = "--";
         }

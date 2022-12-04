@@ -123,7 +123,7 @@ class BatchExporter extends ExcelExporter implements WithMapping
 
         // 超前工時
         try {
-            $batch_id = $row->run_id;
+            $batch_id = $row->id;
             $ppId = Batches::where('id', $batch_id)->first()->prod_processes_list_id;
             $process_time = ProdProcessesList::where('id', $ppId)->first()->process_time;
             $pice = Batches::where('id', $batch_id)->first()->quantity;

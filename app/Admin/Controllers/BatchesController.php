@@ -171,8 +171,6 @@ class BatchesController extends AdminController
         });
 
         $grid->column('PiceTime', __('<a href="#">單位工時▼</a>'))->display(function($Records){
-            
-            dd($this->bid);
             try {
                 $batch_id = $this->bid;
                 $pice = Batches::where('id', $batch_id)->first()->quantity;
@@ -203,6 +201,7 @@ class BatchesController extends AdminController
         });
 
         $grid->column('DiffTime', __('<a href="#">超前工時▼</a>'))->display(function($Records){
+            dd($this->bid);
             try {
                 $batch_id = $this->bid;
                 $ppId = Batches::where('id', $batch_id)->first()->prod_processes_list_id;

@@ -10,6 +10,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\ProductsExporter;
+
 class ProductsController extends AdminController
 {
     /**
@@ -27,6 +29,8 @@ class ProductsController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Products());
+
+        $grid->exporter(new ProductsExporter());
 
         $grid->column('id', __('<a href="#">Id▼</a>'));
         $grid->column('Models.model_code', __('<a href="#">規格代碼▼</a>'));

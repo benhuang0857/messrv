@@ -9,6 +9,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\CustomersExporter;
+
 class CustomersController extends AdminController
 {
     /**
@@ -26,6 +28,8 @@ class CustomersController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Customers());
+
+        $grid->exporter(new CustomersExporter());
 
         // $grid->column('id', __('Id'));
         $grid->column('company_name', __('<a href="#">公司▼</a>'));

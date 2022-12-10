@@ -10,6 +10,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\ToolsExporter;
+
 class ToolsController extends AdminController
 {
     /**
@@ -27,6 +29,8 @@ class ToolsController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Tools());
+
+        $grid->exporter(new ToolsExporter());
 
         $grid->column('id', __('<a href="#">Id▼</a>'));
         $grid->column('Vendors.company_name', __('<a href="#">供應商▼</a>'));

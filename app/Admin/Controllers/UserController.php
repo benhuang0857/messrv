@@ -10,6 +10,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\UserExporter;
+
 class UserController extends AdminController
 {
     /**
@@ -27,6 +29,8 @@ class UserController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new User());
+
+        $grid->exporter(new UserExporter());
 
         // $grid->column('id', __('Id'));
         $grid->column('line_id', __('<a href="#">Line Id▼</a>'))->display(function($value){

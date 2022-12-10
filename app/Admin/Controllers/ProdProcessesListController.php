@@ -12,6 +12,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\ProdProcessesListExporter;
+
 class ProdProcessesListController extends AdminController
 {
     /**
@@ -29,6 +31,8 @@ class ProdProcessesListController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new ProdProcessesList());
+
+        $grid->exporter(new ProdProcessesListExporter());
 
         $grid->column('id', __('<a href="#">Id▼</a>'));
         $grid->column('Products.product_code', __('<a href="#">產品代碼▼</a>'));

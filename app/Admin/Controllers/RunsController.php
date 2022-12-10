@@ -15,6 +15,8 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\RunsExporter;
+
 class RunsController extends AdminController
 {
     /**
@@ -32,6 +34,8 @@ class RunsController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Runs());
+
+        $grid->exporter(new RunsExporter());
 
         $grid->column('id', __('<a href="#">Id▼</a>'));
         $grid->column('run_code', __('<a href="#">工單ID▼</a>'));

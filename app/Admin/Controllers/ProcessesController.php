@@ -9,6 +9,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\ProcessesExporter;
+
 class ProcessesController extends AdminController
 {
     /**
@@ -26,6 +28,8 @@ class ProcessesController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Processes());
+
+        $grid->exporter(new ProcessesExporter());
 
         $grid->column('id', __('<a href="#">Id▼</a>'));
         $grid->column('process_code', __('<a href="#">製程代碼▼</a>'));

@@ -13,6 +13,8 @@ use Encore\Admin\Show;
 use Encore\Admin\Widgets\Table;
 use Encore\Admin\Admin;
 
+use App\Admin\Extensions\OrdersExporter;
+
 class OrdersController extends AdminController
 {
     /**
@@ -30,6 +32,8 @@ class OrdersController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Orders());
+
+        $grid->exporter(new OrdersExporter());
 
         $grid->filter(function($filter){
             $filter->disableIdFilter();

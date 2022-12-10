@@ -30,4 +30,6 @@ Route::group([
 
     $router->resource('orders', OrdersController::class);
     $router->resource('batch-state-records', BatchStateRecordController::class);
+
+    $router->resource('bao-orders', BaoOrderController::class);
 });

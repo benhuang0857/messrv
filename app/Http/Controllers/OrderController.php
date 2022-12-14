@@ -9,6 +9,16 @@ class OrderController extends Controller
 {
     public function all(Request $req)
     {
+        $Data = BaoOrder::all();
+        try {
+            return json_encode($Data, JSON_UNESCAPED_UNICODE);
+        } catch (\Throwable $th) {
+            return json_encode('err');
+        }
+    }
+
+    public function getAllUnPrinted(Request $req)
+    {
         $Data = BaoOrder::where("status", 'pending')->get();
         try {
             return json_encode($Data, JSON_UNESCAPED_UNICODE);

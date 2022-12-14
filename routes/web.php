@@ -28,6 +28,7 @@ Route::get('/line', 'LoginController@pageLine');
 Route::get('/callback/login', 'LoginController@lineLoginCallBack');
 
 Route::get('/api/orders', 'OrderController@all');
+Route::get('/api/orders/unprint', 'OrderController@getAllPrinted');
 Route::get('/api/orders/get', 'OrderController@get');
 Route::get('/api/order/update', 'OrderController@update');
 

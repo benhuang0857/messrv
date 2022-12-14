@@ -9,9 +9,19 @@ class OrderController extends Controller
 {
     public function all(Request $req)
     {
-        $Data = array('Orders' => BaoOrder::all());
+        $Data = BaoOrder::where("status", 'pending')->get();
         try {
-            return json_encode(BaoOrder::all(), JSON_UNESCAPED_UNICODE);
+            return json_encode($Data, JSON_UNESCAPED_UNICODE);
+        } catch (\Throwable $th) {
+            return json_encode('err');
+        }
+    }
+
+    public function getAllPrinted(Request $req)
+    {
+        $Data = BaoOrder::where("status", 'printed')->get();
+        try {
+            return json_encode($Data, JSON_UNESCAPED_UNICODE);
         } catch (\Throwable $th) {
             return json_encode('err');
         }

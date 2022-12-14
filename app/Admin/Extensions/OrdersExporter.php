@@ -20,7 +20,7 @@ class OrdersExporter extends ExcelExporter implements WithMapping
     protected $fileName = '訂單.xlsx';
 
     protected $columns = [
-        'order_code' => '訂單號▼',
+        'order_code' => '訂單號',
         'customer_id' => '廠商',
         'status' => '狀態',
         'created_at' => '建立時間',

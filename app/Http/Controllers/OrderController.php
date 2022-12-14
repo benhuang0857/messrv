@@ -41,7 +41,7 @@ class OrderController extends Controller
     {
         try {
             $order = BaoOrder::where('id', $req->id)->first();
-            $order->status = 'complete';
+            $order->status = 'printed';
             $order->save();
 
             return json_encode('sucess');

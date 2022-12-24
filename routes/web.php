@@ -34,3 +34,7 @@ Route::get('/api/orders/get', 'OrderController@get');
 Route::get('/api/order/update', 'OrderController@update');
 
 Route::get('/api/login', 'LoginController@loginApi');
+
+Route::get('/webcamp', function () {
+    return view('webcamp');
+});

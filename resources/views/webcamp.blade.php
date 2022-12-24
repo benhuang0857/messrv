@@ -15,7 +15,7 @@
 </style>
 
 <div id="my_camera"></div>
-<input type=button value="開啟相機" onClick="take_snapshot()">
+{{-- <input type=button value="開啟相機" onClick="take_snapshot()"> --}}
  
 <div id="results" ></div>
  

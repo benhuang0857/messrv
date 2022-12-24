@@ -9,7 +9,7 @@
 <style>
 #my_camera{
     width: 100%;
-    height: 240px;
+    height: 500px;
     border: 1px solid black;
 }
 </style>

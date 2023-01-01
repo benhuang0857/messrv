@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>壽山掃條碼測試</title>
+    <title>掃條碼測試</title>
 </head>
 <body>
     <!-- 條碼顯示的內容顯示在 qr-reader-results -->
@@ -17,7 +17,7 @@
           /* 處理成功掃描 */  
 
           confirm(window.location = decodedText);
-          
+
 		  document.getElementById("qrtext").innerHTML = decodedText;
 	      if (decodedText.toUpperCase().startsWith("SMSTO:1922:")) {
               var t = decodedText.split(":", 3),

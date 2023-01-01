@@ -1,41 +1,37 @@
 <html>
 <head>
-    <title>Html-Qrcode Demo</title>
+    <meta charset="utf-8">
+    <title>壽山掃條碼測試</title>
+</head>
 <body>
-    <div id="qr-reader" style="width:500px"></div>
-    <div id="qr-reader-results"></div>
+    <!-- 條碼顯示的內容顯示在 qr-reader-results -->
+    <div id="qr-reader-results"><h1 id="qrtext"></h1></div>
+	<!-- 掃描用 -->
+    <div id="qr-reader" style="width:100%"></div>    
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.3/html5-qrcode.min.js"></script>
 <script>
-    function docReady(fn) {
-        // see if DOM is already available
-        if (document.readyState === "complete"
-            || document.readyState === "interactive") {
-            // call on next available tick
-            setTimeout(fn, 1);
-        } else {
-            document.addEventListener("DOMContentLoaded", fn);
-        }
-    }
-
-    docReady(function () {
-        var resultContainer = document.getElementById('qr-reader-results');
-        var lastResult, countResults = 0;
-        function onScanSuccess(decodedText, decodedResult) {
-            if (decodedText !== lastResult) {
-                ++countResults;
-                lastResult = decodedText;
-                // Handle on success condition with the decoded message.
-                console.log(`Scan result ${decodedText}`, decodedResult);
-
-                confirm(window.location = decodedResult);
-            }
-        }
-
-        var html5QrcodeScanner = new Html5QrcodeScanner(
-            "qr-reader", { fps: 10, qrbox: 250 });
-        html5QrcodeScanner.render(onScanSuccess);
-    });
+    <!-- 呼叫 html5qrcode 代入qr-reader -->
+	const html5QrCode = new Html5Qrcode("qr-reader");
+	const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+          /* 處理成功掃描 */  
+		  document.getElementById("qrtext").innerHTML = decodedText;
+	      if (decodedText.toUpperCase().startsWith("SMSTO:1922:")) {
+              var t = decodedText.split(":", 3),
+              r= t[1],
+              a= t[2],
+		      o = "sms:" + r + "&body=" + a; // to-do 如果是android 要將&改為?
+			  window.location.href = o;
+		  }
+          html5QrCode.clear();
+     };
+     const config = { fps: 10, qrbox: 800 };
+	// 直接開啟後面鏡頭
+	<!-- 開啟前置鏡頭 -->
+	<!-- html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccessCallback); -->
+	html5QrCode.start({ 
+	  facingMode: "environment" }, 
+	  config, qrCodeSuccessCallback);
 </script>
 </head>
 </html>

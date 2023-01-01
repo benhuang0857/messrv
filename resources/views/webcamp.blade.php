@@ -1,8 +1,8 @@
 <html>
 <head>
-    <title>QRCode Scanner</title>
+    <title>Html-Qrcode Demo</title>
 <body>
-    <div id="qr-reader" style="width:100%"></div>
+    <div id="qr-reader" style="width:500px"></div>
     <div id="qr-reader-results"></div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -28,7 +28,7 @@
                 // Handle on success condition with the decoded message.
                 console.log(`Scan result ${decodedText}`, decodedResult);
 
-                confirm(window.location = decodedText);
+                confirm(window.location = decodedResult);
             }
         }
 

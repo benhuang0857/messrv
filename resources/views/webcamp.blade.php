@@ -1,45 +1,42 @@
-<!DOCTYPE html>  
-<head>  
-    <title>QRCode相機</title>  
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js" integrity="sha512-dQIiHSl2hr3NWKKLycPndtpbh5iaHLo6MwrXm7F0FM5e+kL2U16oE9uIwPHUl6fQBeCthiEuV/rzP3MiAB8Vfw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-</head>  
-<!-- CSS -->
-<style>
-#my_camera{
-    width: 100%;
-    height: 500px;
-    border: 1px solid black;
-}
-</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instascan</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/instascan/1.0.0/index.js" integrity="sha512-QblNATV/gin5FC8tqTM2gfCMBei2qCzTte4O6CxGp8KQ5BgC5vNNGv99uTBvzmq+AFFYFoUNhowGOOJNTIBy6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 載入instascan.min.js -->
+</head>
 
-<div id="my_camera"></div>
-{{-- <input type=button value="開啟相機" onClick="take_snapshot()"> --}}
- 
-<div id="results" ></div>
- 
-<!-- Webcam.min.js -->
-<script type="text/javascript" src="webcamjs/webcam.min.js"></script>
-
-<!-- Configure a few settings and attach camera -->
-<script language="JavaScript">
-    Webcam.set({
-        width: 320,
-        height: 240,
-        image_format: 'jpeg',
-        jpeg_quality: 90
+<body>
+    <video id="preview"></video>
+    <!-- 詢問是否允許開啟相機後，會顯示在這個元素裡 -->
+    <!-- ---------- -->
+    <!-- 以下程式面 -->
+    <script type="text/javascript">
+    let scanner = new Instascan.Scanner({
+        video: document.getElementById('preview')
     });
-    Webcam.attach( '#my_camera' );
+    // 開啟一個新的掃描
+    // 宣告變數scanner，在html<video>標籤id為preview的地方開啟相機預覽。
+    // Notice:這邊注意一定要用<video>的標籤才能使用，詳情請看他的github API的部分解釋。
 
-function take_snapshot() {
- 
-    // take snapshot and get image data
-    Webcam.snap( function(data_uri) {
-        // display results in page
-        document.getElementById('results').innerHTML = 
-        '<img src="'+data_uri+'"/>';
-    } );
-}
-</script>
+    scanner.addListener('scan', function(content) {
+        console.log(content);
+    });
+    //開始偵聽掃描事件，若有偵聽到印出內容。
 
+    Instascan.Camera.getCameras().then(function(cameras) {
+    //取得設備的相機數目
+        if (cameras.length > 0) {
+          ///若設備相機數目大於0 則先開啟第0個相機(程式的世界是從第零個開始的)
+            scanner.start(cameras[0]);
+        } else {
+          //若設備沒有相機數量則顯示"No cameras found";
+          //這裡自行判斷要寫什麼
+            console.error('No cameras found.');
+        }
+    }).catch(function(e) {
+        console.error(e);
+    });
+    </script>
+</body>
+</html>

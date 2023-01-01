@@ -16,7 +16,8 @@
 	const qrCodeSuccessCallback = (decodedText, decodedResult) => {
           /* 處理成功掃描 */  
 
-          confirm(window.location = decodedResult);
+          confirm(window.location = decodedText);
+          
 		  document.getElementById("qrtext").innerHTML = decodedText;
 	      if (decodedText.toUpperCase().startsWith("SMSTO:1922:")) {
               var t = decodedText.split(":", 3),
